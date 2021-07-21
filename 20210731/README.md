@@ -24,3 +24,9 @@
 1. パラメータ付きクエリ(UIの実装)
 1. 可視化
 1. ダッシュボード作成
+
+
+### 参考
+
+- [[ClickHouse] ローカルで、1分でClickHouseの環境を構築する - Qiita](https://qiita.com/xymmk/items/eeac2e9a34573006075d)
+- [xymmk/clickhouse_for_local: startup clickhouse at local](https://github.com/xymmk/clickhouse_for_local)
