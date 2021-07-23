@@ -3,16 +3,14 @@
 - https://public.bybit.com/trading/ を使って暗号資産価格データをインサートして簡単なSELECT文を発行する
 
 1. 前準備
-    - clickhouse-server コンテナがすでに起動していること。参照：[インストール](./install.md)
-1. clickhouse-server にログインして必要なツールをダウンロード
-    1. `docker ps` でコンテナIDを確認
-    2. `$ docker exec -it コンテナID /bin/bash` でコンテナにログイン
-    3. 必要なツールをインストール
-        ```bash
-        apt update
-        apt install curl -y
-        apt install xz-utils
-        ```
+    - [インストール](./install.md)
+1. `docker-compose exec clickhouse /bin/bash` 
+1. 必要なツールをインストール
+    ```bash
+    apt update
+    apt install curl -y
+    apt install xz-utils
+    ```
 1. インサートしたいデータをダウンロード
     1.     
 

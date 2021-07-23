@@ -1,5 +1,12 @@
 # インストール
 
+## 手順
+1. `user` ディレクトリ配下にユーザー設定用ファイルを作成
+1. `db` ディレクトリ作成
+1. `docker-compose.yml` があるディレクトリに移動
+1. `docker-compose up -d` 
+1. `docker-compose exec clickhouse /bin/bash` 
+
 ## ユーザー設定用ファイルの説明
 - `ユーザー名.xml` を clickhouse-server の `/etc/clickhouse-server/users.d/` に設置することでユーザーを作成出来る
 - `access_management` : 1が読み書きできるユーザ、0がReadOnlyのユーザー
@@ -25,6 +32,4 @@
     </yandex>
     ```
 - 参照：[User Settings | ClickHouse Documentation](https://clickhouse.tech/docs/en/operations/settings/settings-users/#user-settings)
-
-## docker-compose.yml 
 
