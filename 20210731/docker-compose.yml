@@ -7,7 +7,7 @@ services:
             # httpリクエストに使うポート
             - 8123:8123
             # クライアントポート
-            - 9999:9999
+            - 9000:9000
         volumes: 
             - type: bind # バインドマウントの利用 https://matsuand.github.io/docs.docker.jp.onthefly/storage/bind-mounts/
               source: "./db"
@@ -15,6 +15,12 @@ services:
             - type: bind 
               source: "./users"
               target: "/etc/clickhouse-server/users.d"
+            - type: bind
+              source: "./sql"
+              target: "/sql"
+            - type: bind
+              source: "./data"
+              target: "/data"
 
 #         networks:
 #             clickhouse-net:

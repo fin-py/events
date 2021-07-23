@@ -4,59 +4,67 @@
 
 1. 前準備
     - [インストール](./install.md)
-1. `docker-compose exec clickhouse /bin/bash` 
+1. コンテナにログイン
+    ```
+    docker-compose exec clickhouse /bin/bash
+    ```
 1. 必要なツールをインストール
     ```bash
     apt update
     apt install curl -y
     apt install xz-utils
     ```
-1. インサートしたいデータをダウンロード
-    1.     
-
-
-- TODO ：データのダウンロードからインサートまでは、どりらんさんのを参考にする
-
-## クライアントコンテナにログイン
-- `docker run -it --rm --link <サーバーのコンテナ名>:clickhouse-server yandex/clickhouse-client --host clickhouse-server --user <ユーザー名>`
-- 例
+1. インサートするデータの確認
+    - 今回は data ディレクトリに、サンプルデータを [Directory listing for /trading/](https://public.bybit.com/trading/)から適当にダウンロードして起きました。
+    - データについているヘッダーはデータベースへインサートする時は不必要なので、第一行目は削除しています
+    - 以下は、ダウンロード、展開、1行目削除をワンライナーで書いたコマンドです。
+        ```bash
+        $ wget -O - https://public.bybit.com/trading/BTCUSD/BTCUSD2021-07-22.csv.gz | gzip -d  | tail -n +2 > BTCUSD2021-07-22.csv
+        ```
+1. DataBase 作成
     ```
-    $ docker run -it --rm --link some-clickhouse-server:clickhouse-server yandex/clickhouse-client --host clickhouse-server --user shinseitaro
-
-    ClickHouse client version 21.6.5.37 (official build).
-    Connecting to clickhouse-server:9000 as user shinseitaro.
-    Connected to ClickHouse server version 21.6.5 revision 54448.
-
-    9942c50ba5cf :)     
+    clickhouse-client -q "CREATE DATABASE IF NOT EXISTS bybit"
+    ``` 
+1. Table 作成
+    ```
+    clickhouse-client < /sql/create_table.sql
+    ```
+1. データインサート
+    ```bash
+    for x in ./data/*.csv; do
+    time clickhouse-client --query "INSERT INTO bybit.market FORMAT CSV" --max_insert_block_size=100000 < $x
+    done
+    ```
+1. 確認
+    ```
+    clickhouse-client -q "SELECT COUNT(*) FROM bybit.market"
     ```
 
-## データベースの作成
-- 例： `bybit` 用データベースを作成
-```sql
-CREATE DATABASE IF NOT EXISTS bybit
-``` 
-## テーブルの作成・INSERT
-```sql
-CREATE TABLE bybit.market
-    (
-        `timestamp` DateTime64,
-        `symbol` String,
-        `side` FixedString(4),
-        `size` Float32,
-        `price` Float64,
-        `tickerDirection` FixedString(15),
-        `trdMatchID` String,
-        `grossValue` Float64,
-        `homeNotional` Float64,
-        `foreignNotional` Float64
-    )
-    ENGINE = MergeTree
-    PARTITION BY toYYYYMM(timestamp)
-    ORDER BY timestamp
-```
-- https://clickhouse.tech/docs/en/sql-reference/statements/insert-into/
-- `INSERT INTO [db.]table [(c1, c2, c3)] FORMAT Values (v11, v12, v13), (v21, v22, v23), ...
-`    にしたほうが早い
-- TODO: どりらんさんのを確認
+##  サンプルクエリ
 
-## サンプルクエリ
+1. SELECT 
+    ```SQL
+    SELECT * FROM bybit.market LIMIT 5
+    ```
+1. symbol ごとに平均
+    ```sql
+    SELECT symbol, avg(price) FROM bybit.market GROUP BY symbol
+    ```
+1. 分単位でグループ化して、OHLC と 平均を出す
+    ```sql
+    SELECT
+        minute,
+        symbol,
+        any(price) AS Open,
+        max(price) AS High,
+        min(price) AS Low,
+        anyLast(price) AS Last,
+        avg(price) AS Mean    
+    FROM bybit.market 
+    GROUP BY symbol, toStartOfMinute(timestamp) AS minute
+    ORDER BY minute
+    LIMIT 10
+    ```
+    - [any](https://clickhouse.tech/docs/en/sql-reference/aggregate-functions/reference/any/#agg_function-any): Selects the first encountered value
+    - [anyLast](https://clickhouse.tech/docs/en/sql-reference/aggregate-functions/reference/anylast/):Selects the last value encountered 
+
