@@ -47,7 +47,7 @@ services:
             - 9000:9000
         volumes: 
             - type: bind 
-              source: "./db" # コンテナ
+              source: "./db" # コンテナのデータボリューム
               target: "/var/lib/clickhouse"
             - type: bind 
               source: "./users" # ユーザファイル
@@ -65,3 +65,4 @@ services:
 - [yandex/clickhouse-server - Docker Image | Docker Hub](https://hub.docker.com/r/yandex/clickhouse-server/)
 - [[ClickHouse] ローカルで、1分でClickHouseの環境を構築する - Qiita](https://qiita.com/xymmk/items/eeac2e9a34573006075d)
 - [xymmk/clickhouse_for_local: startup clickhouse at local](https://github.com/xymmk/clickhouse_for_local)
+- [Dockerのバックアップの考え方とその方法について](https://www.memotansu.jp/docker/489/)
