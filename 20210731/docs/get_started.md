@@ -1,42 +1,73 @@
 # Getting started
 
-- https://public.bybit.com/trading/ を使って暗号資産価格データをインサートして簡単なSELECT文を発行する
+https://public.bybit.com/trading/ を使って暗号資産価格データをインサートして簡単なSELECT文を発行してみましょう
 
+## データインサート
 1. 前準備
     - [インストール](./install.md)
-1. インサートするデータの確認
+1. インサートするデータの
     - サンプルデータを[Directory listing for /trading/](https://public.bybit.com/trading/)から適当にダウンロードして、`data` ディレクトリに配置して下さい
     - データについているヘッダーはデータベースへインサートする時は不必要なので、第一行目は削除します
     - 以下は、ダウンロード、展開、1行目削除をワンライナーで書いたコマンドです。
         ```bash
-        $ wget -O - https://public.bybit.com/trading/BTCUSD/BTCUSD2021-07-22.csv.gz | gzip -d  | tail -n +2 > BTCUSD2021-07-22.csv
+        $ wget -O - https://public.bybit.com/trading/BTCUSD/BTCUSD2021-07-22.csv.gz | gzip -d  | tail -n +2 > data/BTCUSD2021-07-22.csv
+        ```
+1. データインサート用のSQL作成
+    - テーブル作成sql
+        ```bash
+        $ touch sql/create_table.sql
+        ```
+        ```sql
+        CREATE TABLE bybit.market
+        (
+            `timestamp` DateTime64,
+            `symbol` String,
+            `side` FixedString(4),
+            `size` Float32,
+            `price` Float64,
+            `tickerDirection` FixedString(15),
+            `trdMatchID` String,
+            `grossValue` Float64,
+            `homeNotional` Float64,
+            `foreignNotional` Float64
+        )
+        ENGINE = MergeTree
+        PARTITION BY toYYYYMM(timestamp)
+        ORDER BY timestamp    
         ```
 1. コンテナにログイン
     ```
     docker-compose exec clickhouse /bin/bash
     ```
-1. 必要なツールをインストール
-    ```bash
-    apt update
-    apt install curl -y
-    apt install xz-utils
-    ```
+    <!-- 1. 必要なツールをインストール
+        ```bash
+        apt update
+        apt install curl -y
+        apt install xz-utils
+        ``` -->
 1. DataBase 作成
     ```
     clickhouse-client -q "CREATE DATABASE IF NOT EXISTS bybit"
     ``` 
+    - `-q` もしくは `--query` オプションでクエリ実行
 1. Table 作成
     ```
     clickhouse-client < /sql/create_table.sql
     ```
+    - sql ファイルのクエリを実行
 1. データインサート
     ```bash
     for x in ./data/*.csv; do
     time clickhouse-client --query "INSERT INTO bybit.market FORMAT CSV" --max_insert_block_size=100000 < $x
     done
     ```
+    - csv ファイルなどに入っているファイルをインサートする場合 `clickhouse-client --query "INSERT INTO bybit.market FORMAT CSV" --max_insert_block_size=100000 < ファイルパス`
+    - `--max_insert_block_size=` で一度にインサートする行を指定
+    - `FORMAT `でファイルタイプを指定
+    - 対応ファイル一覧はこちら：[Input and Output Formats | ClickHouse Documentation](https://clickhouse.tech/docs/en/interfaces/formats/)
+
 1. 確認
-    ```
+    ```bash
     clickhouse-client -q "SELECT COUNT(*) FROM bybit.market"
     ```
 
