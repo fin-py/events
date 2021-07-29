@@ -2,6 +2,11 @@
 
 この資料を作成中に出くわしたエラーをまとめておきます。何かのおやくに立てればと。
 
+## docker-compose up -d すると services.clickhouse.volumes contains an invalid type, it should be a string 
+- 解決方法：docker-compose.yml の version を '3.2' にする
+- 参照：[Invalid type in volume, it should be a string. · Issue #4763 · docker/compose](https://github.com/docker/compose/issues/4763)
+
+
 ## docker-compose up -d すると bind: address already in use
 
 - エラーメッセージ

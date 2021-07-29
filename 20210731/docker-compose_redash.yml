@@ -1,0 +1,61 @@
+version: '2'
+x-redash-service: &redash-service
+  image: redash/redash:8.0.0.b32245
+  depends_on:
+    - postgres
+    - redis
+  env_file: redash.env
+services:
+  server:
+    <<: *redash-service
+    command: server
+    ports:
+      - "5000:5000"
+    environment:
+      REDASH_WEB_WORKERS: 4
+  scheduler:
+    <<: *redash-service
+    command: scheduler
+    environment:
+      QUEUES: "celery"
+      WORKERS_COUNT: 1
+  scheduled_worker:
+    <<: *redash-service
+    command: worker
+    environment:
+      QUEUES: "scheduled_queries,schemas"
+      WORKERS_COUNT: 1
+  adhoc_worker:
+    <<: *redash-service
+    command: worker
+    environment:
+      QUEUES: "queries"
+      WORKERS_COUNT: 2
+  redis:
+    image: redis:5.0-alpine
+  postgres:
+    image: postgres:9.5-alpine
+    env_file: redash.env
+  nginx:
+    image: redash/nginx:latest
+    ports:
+      - "80:80"
+    depends_on:
+      - server
+    links:
+      - server:redash
+  clickhouse:
+    image: yandex/clickhouse-server
+    container_name: clickhouse_server
+    ports:
+      - 8123:8123
+      - 9000:9000
+    volumes: 
+      - "./db:/var/lib/clickhouse"
+      - "./users:/etc/clickhouse-server/users.d"
+      - "./sql:/sql"
+      - "./data:/data"
+    ulimits:
+      nofile:
+        soft: 262144
+        hard: 262144
