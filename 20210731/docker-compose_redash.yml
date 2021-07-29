@@ -5,7 +5,6 @@ x-redash-service: &redash-service
     - postgres
     - redis
   env_file: redash.env
-  restart: always
 services:
   server:
     <<: *redash-service
