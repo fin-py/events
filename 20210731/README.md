@@ -20,7 +20,8 @@
 
 ### Redash
 
-1. Redashとは
+1. [Redashとは](./docs/about_redash.md)
+1. [ハンズオン環境セットアップ手順](./docs/redash_handson_env.md)
 1. パラメータ付きクエリ(UIの実装)
 1. 可視化
 1. ダッシュボード作成
