@@ -81,19 +81,22 @@ https://public.bybit.com/trading/ を使って暗号資産価格データをイ�
     ```sql
     SELECT symbol, avg(price) FROM bybit.market GROUP BY symbol
     ```
-1. '2021-07-22 01:00:00'以降
+1. Where 句
     ```sql
-    SELECT * FROM bybit.market WHERE timestamp > '2021-07-22 01:00:00' Limit 5 
+    SELECT 
+    * 
+    FROM bybit.market 
+    WHERE timestamp > '2021-07-22 01:00:00' and tickerDirection = 'ZeroMinusTick'
     ```
 1. タイムゾーン確認
     ```sql
-    SELECT timeZoneOf(timestamp) AS date_tokyo from bybit.market LIMIT 5
+    SELECT timeZoneOf(timestamp) AS TimeZone, * from bybit.market LIMIT 5
     ```    
-1. タイムゾーン変更
+1. 東京時間を追加
     ```sql
-    SELECT toTimezone(timestamp, 'Asia/Tokyo') AS date_tokyo from bybit.market LIMIT 5
+    SELECT toTimezone(timestamp, 'Asia/Tokyo') AS date_tokyo, * from bybit.market LIMIT 5
     ```
-1. 分単位でグループ化して、OHLC と 平均を出す
+1. 分単位でグループ化して、OHLC と 平均をSymbolごとに出力
     ```sql
     SELECT
         minute,
@@ -140,8 +143,8 @@ https://public.bybit.com/trading/ を使って暗号資産価格データをイ�
 1. ウェイト付き平均、ただしシンボル別にウェイトを変更
     ```sql
     SELECT
-        avgWeightedIf(price, 0.1, symbol = 'BTCUSD'),
-        avgWeightedIf(price, 1.5, symbol = 'ETHUSD'),
+        avgWeightedIf(price, 0.1, symbol = 'BTCUSD') as avgBTCUSD,
+        avgWeightedIf(price, 1.5, symbol = 'ETHUSD') as avgETHUSD
     FROM bybit.market
     ```
 1. Group by したデータをArrayで取得
