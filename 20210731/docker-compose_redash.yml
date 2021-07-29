@@ -33,11 +33,9 @@ services:
       WORKERS_COUNT: 2
   redis:
     image: redis:5.0-alpine
-    restart: always
   postgres:
     image: postgres:9.5-alpine
     env_file: redash.env
-    restart: always
   nginx:
     image: redash/nginx:latest
     ports:
@@ -46,7 +44,6 @@ services:
       - server
     links:
       - server:redash
-    restart: always
   clickhouse:
     image: yandex/clickhouse-server
     container_name: clickhouse_server
