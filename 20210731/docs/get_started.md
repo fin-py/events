@@ -113,8 +113,6 @@ https://public.bybit.com/trading/ を使って暗号資産価格データをイ�
 ##  サンプルクエリ
 
 - [SELECT Query](https://clickhouse.tech/docs/en/sql-reference/statements/select/)
-- [ClickHouse/tests/queries/1_stateful at master · ClickHouse/ClickHouse](https://github.com/ClickHouse/ClickHouse/tree/master/tests/queries/1_stateful)
-- [Playground | ClickHouse Documentation](https://clickhouse.tech/docs/en/getting-started/playground/)
 
 
 1. SELECT 
@@ -205,3 +203,19 @@ https://public.bybit.com/trading/ を使って暗号資産価格データをイ�
     - `groupArrayMovingAvg(5)(price)` : `5` がwindow size。`price` がターゲット。
     - [groupArrayMovingAvg | ClickHouse Documentation](https://clickhouse.tech/docs/en/sql-reference/aggregate-functions/reference/grouparraymovingavg/#agg_function-grouparraymovingavg)
 
+## そのた参考資料
+
+- [ClickHouse サンプルクエリ集](https://github.com/ClickHouse/ClickHouse/tree/master/tests/queries/1_stateful)
+    - テスト用クエリ
+- [Playground | ClickHouse Documentation](https://clickhouse.tech/docs/en/getting-started/playground/)
+    - ClickHouse をオンラインで試すことができるプレイグラウンド
+    - 上記テスト用クエリも、ReadOnly権限のクエリであれば試すことが出来る。
+        - DB名がサンプルクエリとは違うので注意
+        - 例: https://github.com/ClickHouse/ClickHouse/blob/master/tests/queries/1_stateful/00006_agregates.sql
+            ```sql
+            SELECT sum(AdvEngineID), count(), avg(ResolutionWidth) FROM test.hits
+            ```
+            - playground で試す時場合
+            ```sql
+            SELECT sum(AdvEngineID), count(), avg(ResolutionWidth) FROM hits_v1
+            ```

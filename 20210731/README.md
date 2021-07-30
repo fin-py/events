@@ -12,9 +12,12 @@
 
 1. [Clickhouseとは](docs/about_clickhouse.md)
 1. [インストール手順(説明のみ)](docs/install.md)
-1. [データベース,テーブルの作成・INSERT,サンプルクエリ](docs/get_started.md)
-1. [UPDATE, DELETE](docs/update_delete.md) （時間があれば説明）
-1. [python clickhouse driver](docs/python_clickhouse_driver.md) （時間があれば説明）
+1. [データベース、テーブルの作成、データINSERT、サンプルクエリ](docs/get_started.md)
+1. [UPDATE, DELETE](docs/update_delete.md)
+
+- その他資料
+    - [python clickhouse driver](docs/python_clickhouse_driver.md)
+    - [トラブルシューティング](docs/python_clickhouse_driver.md)
 
 
 ### Redash
@@ -26,3 +29,6 @@
 1. [可視化](./docs/visualization.md)
 1. ダッシュボード
     - ハンズオン時に解説
+
+
+
