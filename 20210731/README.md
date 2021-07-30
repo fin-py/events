@@ -17,7 +17,7 @@
 
 - その他資料
     - [python clickhouse driver](docs/python_clickhouse_driver.md)
-    - [トラブルシューティング](docs/python_clickhouse_driver.md)
+    - [トラブルシューティング](docs/errors.md)
 
 
 ### Redash
