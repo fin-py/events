@@ -5,7 +5,7 @@ https://public.bybit.com/trading/ を使って暗号資産価格データをイ�
 ## データインサート
 ### 手順
 1. インサートしたいデータをホストの `data` ディレクトリへ保存
-1. データインサート用のSQLを作成
+1. データテーブル作成用のSQLを作成
 1. コンテナへログイン
 1. データベースとテーブルを作成
 1. データをインサート
@@ -13,14 +13,14 @@ https://public.bybit.com/trading/ を使って暗号資産価格データをイ�
 
 ### 作業
 
-1. 前準備
+1. 事前準備
     - [ClickHouse-server インストール](./install.md)
 1. インサートするデータのダウンロード
     - サンプルデータを[Directory listing for /trading/](https://public.bybit.com/trading/)から適当にダウンロードして、`data` ディレクトリに格納。
     - 一行目のヘッダーは不要なので削除。
     - 以下は、ダウンロード、展開、1行目削除をワンライナーで書いたコマンドです。
         ```bash
-        $ wget -O - https://public.bybit.com/trading/BTCUSD/BTCUSD2021-07-22.csv.gz | gzip -d  | tail -n +2 > data/BTCUSD2021-07-22.csv
+        wget -O - https://public.bybit.com/trading/BTCUSD/BTCUSD2021-07-22.csv.gz | gzip -d  | tail -n +2 > data/BTCUSD2021-07-22.csv
         ```
 1. データインサート用のSQL作成
     - テーブル作成sql
@@ -78,7 +78,7 @@ https://public.bybit.com/trading/ を使って暗号資産価格データをイ�
     - sql ファイルのクエリを実行
 1. データインサート
     - ファイルデータをインサートする
-        - `clickhouse-client -q "INSERT INTO bybit.market FORMAT CSV" --max_insert_block_size=[一度にインサートする行数] < [ファイルパス]`
+        - `clickhouse-client -q "INSERT INTO [データベース.テーブル] FORMAT [ファイルフォーマット]" --max_insert_block_size=[一度にインサートする行数] < [ファイルパス]`
         - `--max_insert_block_size=` で一度にインサートする行を指定
         - `FORMAT `でファイルタイプを指定
         - 対応ファイル一覧はこちら：[Input and Output Formats | ClickHouse Documentation](https://clickhouse.tech/docs/en/interfaces/formats/)
@@ -116,7 +116,7 @@ https://public.bybit.com/trading/ を使って暗号資産価格データをイ�
     ```SQL
     SELECT * FROM bybit.market LIMIT 5
     ```
-1. symbol ごとに平均
+1. symbolごとに価格の平均
     ```sql
     SELECT symbol, avg(price) FROM bybit.market GROUP BY symbol
     ```
@@ -126,6 +126,7 @@ https://public.bybit.com/trading/ を使って暗号資産価格データをイ�
     * 
     FROM bybit.market 
     WHERE timestamp > '2021-07-22 01:00:00' and tickerDirection = 'ZeroMinusTick'
+    LIMIT 5
     ```
 1. タイムゾーン確認
     ```sql

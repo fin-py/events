@@ -8,7 +8,7 @@
 1. 適当なディレクトリ作成して cd 
 1. 必要なディレクトリとファイルを作成
     ```bash=
-    $ mkdir data db users sql
+    $ mkdir db users sql data
     $ touch docker-compose.yml
     ```
 1. `user` ディレクトリ配下にユーザー設定用ファイルを作成
@@ -54,7 +54,7 @@
                 # クライアントポート
                 - 9000:9000
             volumes: 
-                # コンテナのデータボリューム
+                # コンテナのボリューム
                 - type: bind
                   source: "./db"
                   target: "/var/lib/clickhouse"
