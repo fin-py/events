@@ -6,6 +6,10 @@
 
 ## 手順
 1. 適当なディレクトリ作成して cd 
+    ```bash=
+    $ mkdir clickhouse-test
+    $ cd clickhouse-test
+    ``` 
 1. 必要なディレクトリとファイルを作成
     ```bash=
     $ mkdir db users sql data
@@ -89,6 +93,10 @@
     $ docker-compose ps
     ``` 
 1. 停止
+    ```bash
+    $ docker-compose stop
+    ```
+1. 停止してリソースも消す
     ```bash
     $ docker-compose down
     ```

@@ -131,7 +131,9 @@ https://public.bybit.com/trading/ を使って暗号資産価格データをイ�
 1. タイムゾーン確認
     ```sql
     SELECT timeZoneOf(timestamp) AS TimeZone, * from bybit.market LIMIT 5
-    ```    
+    ```  
+    - [toTimezone](https://clickhouse.tech/docs/en/sql-reference/functions/date-time-functions/#totimezone)
+  
 1. 東京時間を追加
     ```sql
     SELECT toTimezone(timestamp, 'Asia/Tokyo') AS date_tokyo, * from bybit.market LIMIT 5
