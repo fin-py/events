@@ -1,4 +1,4 @@
-# Clickhouseを使ってみよう
+# ClickHouseを使ってみよう
 
 ついでにRedashで可視化してダッシュボードをつくってみよう
 
@@ -10,7 +10,7 @@
 
 ### Clickhouse
 
-1. [Clickhouseとは](docs/about_clickhouse.md)
+1. [ClickHouseとは](docs/about_clickhouse.md)
 1. [インストール手順(説明のみ)](docs/install.md)
 1. [データベース、テーブルの作成、データINSERT、サンプルクエリ](docs/get_started.md)
 1. [UPDATE, DELETE](docs/update_delete.md)
