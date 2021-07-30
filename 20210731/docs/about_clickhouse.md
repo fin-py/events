@@ -12,10 +12,9 @@
 - クエリ検索パフォーマンスがとても優れている
 
 ### 作者
-- Yandex.Metrica
+- Yandex.Metrica(ロシア)
 - [2011年Nasdaqに上場](https://finance.yahoo.com/quote/YNDX/)
 - ウェブ解析プラットフォーム用に開発
-- ロシア人
  
 ### ユーザー
 - [Adopters](https://clickhouse.tech/docs/en/introduction/adopters/)：実際にビジネスで使っている会社一覧

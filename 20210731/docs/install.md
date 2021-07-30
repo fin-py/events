@@ -1,6 +1,6 @@
 # インストール
 ## 前提条件
-- 今回は clickhouse-server を docker-compose で構築する方法を紹介します。ですのでこのTutorialに従う場合は docker / docker-compose のインストールをお願いします。
+- 今回は clickhouse-server を docker-compose で構築する方法を紹介します。よってこのTutorialに従う場合は docker / docker-compose のインストールをお願いします。
 - 他の方法でのインストールは [Installation | ClickHouse Documentation](https://clickhouse.tech/docs/en/getting-started/install/)を参照してください
 
 
@@ -13,6 +13,7 @@
     ```
 1. `user` ディレクトリ配下にユーザー設定用ファイルを作成
     - 任意のユーザー名で、`ユーザー名.xml` を作成
+    - clickhouse-server の `/etc/clickhouse-server/users.d/` ディレクトリに配置
     - 例： `read-write-user.xml` 
         ```bash
         $ touch users/read-write-user.xml
@@ -38,8 +39,8 @@
         </yandex>
         ```
         - `read-write-user` タグは自分の名前に変えてください
-        - <access_management>1</access_management>：読み書き可。0であれば読みのみ可。
-        - 参照：[User Settings | ClickHouse Documentation](https://clickhouse.tech/docs/en/operations/settings/settings-users/#user-settings)
+        - <access_management>1</access_management>：**読み書き可。0であれば読みのみ可**。
+        - その他の設定に関してはこちら：[User Settings | ClickHouse Documentation](https://clickhouse.tech/docs/en/operations/settings/settings-users/#user-settings)
 1. `docker-compose.yml` 作成
     ```bash
     version: '3'
@@ -53,18 +54,25 @@
                 # クライアントポート
                 - 9000:9000
             volumes: 
-                - type: bind 
-                source: "./db" # コンテナのデータボリューム
-                target: "/var/lib/clickhouse"
-                - type: bind 
-                source: "./users" # ユーザファイル
-                target: "/etc/clickhouse-server/users.d"
+                # コンテナのデータボリューム
                 - type: bind
-                source: "./sql" # .sql ファイル格納
-                target: "/sql"
+                  source: "./db"
+                  target: "/var/lib/clickhouse"
+
+                # ユーザファイル
                 - type: bind
-                source: "./data" # サンプルデータを格納
-                target: "/data"
+                  source: "./users"
+                  target: "/etc/clickhouse-server/users.d"
+
+                # .sql ファイル格納
+                - type: bind
+                  source: "./sql"
+                  target: "/sql"
+
+                # サンプルデータを格納
+                - type: bind
+                  source: "./data"
+                  target: "/data"
     ```
     - 参考
         - [yandex/clickhouse-server - Docker Image | Docker Hub](https://hub.docker.com/r/yandex/clickhouse-server/)
@@ -84,30 +92,3 @@
     ```bash
     $ docker-compose down
     ```
-
-
-## ユーザー設定用ファイルの説明
-- `ユーザー名.xml` を clickhouse-server の `/etc/clickhouse-server/users.d/` に設置することでユーザーを作成出来る
-- `access_management` : 1が読み書きできるユーザ、0がReadOnlyのユーザー
-- ファイル例
-    - `shinseitaro.xml`
-    ```xml
-    <?xml version="1.0"?>
-    <yandex>
-        <users>
-            <shinseitaro> <!-- 名前書き換え -->
-                <password></password>
-                <networks>
-                    <ip>::/0</ip>
-                </networks>
-                <!-- Settings profile for user. -->
-                <profile>default</profile>
-                <!-- Quota for user. -->
-                <quota>default</quota>
-                <!-- User can create other users and grant rights to them. -->
-                <access_management>1</access_management>
-            </shinseitaro><!-- 名前書き換え -->
-        </users>
-    </yandex>
-    ```
-- 参照：[User Settings | ClickHouse Documentation](https://clickhouse.tech/docs/en/operations/settings/settings-users/#user-settings)

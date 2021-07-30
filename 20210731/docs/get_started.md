@@ -3,11 +3,21 @@
 https://public.bybit.com/trading/ を使って暗号資産価格データをインサートして簡単なSELECT文を発行してみましょう
 
 ## データインサート
+### 手順
+1. インサートしたいデータをホストの `data` ディレクトリへ保存
+1. データインサート用のSQLを作成
+1. コンテナへログイン
+1. データベースとテーブルを作成
+1. データをインサート
+1. 確認
+
+### 作業
+
 1. 前準備
-    - [インストール](./install.md)
-1. インサートするデータの
-    - サンプルデータを[Directory listing for /trading/](https://public.bybit.com/trading/)から適当にダウンロードして、`data` ディレクトリに配置して下さい
-    - データについているヘッダーはデータベースへインサートする時は不必要なので、第一行目は削除します
+    - [ClickHouse-server インストール](./install.md)
+1. インサートするデータのダウンロード
+    - サンプルデータを[Directory listing for /trading/](https://public.bybit.com/trading/)から適当にダウンロードして、`data` ディレクトリに格納。
+    - 一行目のヘッダーは不要なので削除。
     - 以下は、ダウンロード、展開、1行目削除をワンライナーで書いたコマンドです。
         ```bash
         $ wget -O - https://public.bybit.com/trading/BTCUSD/BTCUSD2021-07-22.csv.gz | gzip -d  | tail -n +2 > data/BTCUSD2021-07-22.csv
@@ -35,6 +45,9 @@ https://public.bybit.com/trading/ を使って暗号資産価格データをイ�
         PARTITION BY toYYYYMM(timestamp)
         ORDER BY timestamp    
         ```
+        - [Data Types | ClickHouse Documentation](https://clickhouse.tech/docs/en/sql-reference/data-types/)
+        - [FixedString(N) | ClickHouse Documentation](https://clickhouse.tech/docs/en/sql-reference/data-types/fixedstring/)
+
 1. コンテナにログイン
     ```
     docker-compose exec clickhouse /bin/bash
@@ -45,8 +58,16 @@ https://public.bybit.com/trading/ を使って暗号資産価格データをイ�
         apt install curl -y
         apt install xz-utils
         ``` -->
-1. DataBase 作成
+1. CLI を使ってクエリを実行
+    - `clickhouse-client` 
+    - [Command-Line Client | ClickHouse Documentation](https://clickhouse.tech/docs/en/interfaces/cli/#command-line-options)
+    ```bash
+    clickhouse-client --version
+    ClickHouse client version 21.7.4.18 (official build).
     ```
+
+1. DataBase 作成
+    ```bash
     clickhouse-client -q "CREATE DATABASE IF NOT EXISTS bybit"
     ``` 
     - `-q` もしくは `--query` オプションでクエリ実行
@@ -56,20 +77,38 @@ https://public.bybit.com/trading/ を使って暗号資産価格データをイ�
     ```
     - sql ファイルのクエリを実行
 1. データインサート
-    ```bash
-    for x in ./data/*.csv; do
-    time clickhouse-client --query "INSERT INTO bybit.market FORMAT CSV" --max_insert_block_size=100000 < $x
-    done
-    ```
-    - csv ファイルなどに入っているファイルをインサートする場合 `clickhouse-client --query "INSERT INTO bybit.market FORMAT CSV" --max_insert_block_size=100000 < ファイルパス`
-    - `--max_insert_block_size=` で一度にインサートする行を指定
-    - `FORMAT `でファイルタイプを指定
-    - 対応ファイル一覧はこちら：[Input and Output Formats | ClickHouse Documentation](https://clickhouse.tech/docs/en/interfaces/formats/)
+    - ファイルデータをインサートする
+        - `clickhouse-client -q "INSERT INTO bybit.market FORMAT CSV" --max_insert_block_size=[一度にインサートする行数] < [ファイルパス]`
+        - `--max_insert_block_size=` で一度にインサートする行を指定
+        - `FORMAT `でファイルタイプを指定
+        - 対応ファイル一覧はこちら：[Input and Output Formats | ClickHouse Documentation](https://clickhouse.tech/docs/en/interfaces/formats/)
+    - 例
+        ```bash
+        clickhouse-client -q "INSERT INTO bybit.market FORMAT CSV" --max_insert_block_size=100000 < ./data/BTCUSD.csv
+        ```
+    - ループでインサートする
+        ```bash
+        for x in ./data/*.csv; do
+        time clickhouse-client -q "INSERT INTO bybit.market FORMAT CSV" --max_insert_block_size=100000 < $x
+        done
+        ```
 
 1. 確認
     ```bash
     clickhouse-client -q "SELECT COUNT(*) FROM bybit.market"
     ```
+
+## クライアントにログイン
+
+- default ユーザとしてログイン
+    ```bash
+    clickhouse-client
+    ```
+- 特定のユーザとしてログイン
+    ```bash
+    clickhouse-client -u read-write-user --password xxxxx
+    ```
+- [Command-Line Client | ClickHouse Documentation](https://clickhouse.tech/docs/en/interfaces/cli/#command-line-options)
 
 ##  サンプルクエリ
 
