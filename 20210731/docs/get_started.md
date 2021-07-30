@@ -112,6 +112,11 @@ https://public.bybit.com/trading/ を使って暗号資産価格データをイ�
 
 ##  サンプルクエリ
 
+- [SELECT Query](https://clickhouse.tech/docs/en/sql-reference/statements/select/)
+- [ClickHouse/tests/queries/1_stateful at master · ClickHouse/ClickHouse](https://github.com/ClickHouse/ClickHouse/tree/master/tests/queries/1_stateful)
+- [Playground | ClickHouse Documentation](https://clickhouse.tech/docs/en/getting-started/playground/)
+
+
 1. SELECT 
     ```SQL
     SELECT * FROM bybit.market LIMIT 5
