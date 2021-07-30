@@ -8,7 +8,7 @@
 
 ## タイムテーブル
 
-### Clickhouse
+### ClickHouse
 
 1. [ClickHouseとは](docs/about_clickhouse.md)
 1. [インストール手順(説明のみ)](docs/install.md)
