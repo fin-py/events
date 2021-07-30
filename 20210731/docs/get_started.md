@@ -147,17 +147,14 @@ https://public.bybit.com/trading/ を使って暗号資産価格データをイ�
         avgWeightedIf(price, 1.5, symbol = 'ETHUSD') as avgETHUSD
     FROM bybit.market
     ```
-1. Group by したデータをArrayで取得
+1. Group by したデータをArrayで取得。配列のデータは移動平均。
     ```sql
-    SELECT
-        minute,
-        tickerDirection,
-        groupArrayMovingAvgIf(price, symbol = 'BTCUSD')
-    FROM bybit.market
-    GROUP BY
-        tickerDirection,
-        toStartOfInterval(timestamp, toIntervalSecond(1)) AS minute
+    SELECT minute, symbol, groupArrayMovingAvg(5)(price) as ma5 
+    from bybit.market
+    group by symbol,toStartOfMinute(timestamp) AS minute
     ORDER BY minute ASC
-    LIMIT 5    
+    limit 10
     ```
-1. 
+    - `groupArrayMovingAvg(5)(price)` : `5` がwindow size。`price` がターゲット。
+    - [groupArrayMovingAvg | ClickHouse Documentation](https://clickhouse.tech/docs/en/sql-reference/aggregate-functions/reference/grouparraymovingavg/#agg_function-grouparraymovingavg)
+
