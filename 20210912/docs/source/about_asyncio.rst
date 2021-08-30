@@ -39,23 +39,6 @@ asyncioとは
 - 多くの様々な地点から入る、出る、再開できる
 - `async def <https://docs.python.org/ja/3/reference/compound_stmts.html#async-def>`_ 文で実装できる
 
-async/await構文で宣言
----------------------
-
-- asyncioを使ったアプリケーションを書くのに推奨される方法
-
-.. code-block:: python
-   :linenos:
-
-   import asyncio
-
-   async def main():
-      print('hello')
-      await asyncio.sleep(1)
-      print('world')
-
-   asyncio.run(main())
-
 Task
 -----
 
