@@ -1,0 +1,25 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/setup-python@v1
+        with:
+          python-version: 3.9
+      - name: Build pages
+        run: |
+          cd 20210912/docs
+          pip install -r requirements.txt
+          make revealjs
+          touch build/revealjs/.nojekyll
+      - name: Deploy to GitHub Pages
+        uses: maxheld83/ghpages@v0.2.1
+        env:
+          BUILD_DIR: 20210912/docs/build/revealjs
+          GH_PAT: ${{ secrets.GH_PAT }}
