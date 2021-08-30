@@ -10,7 +10,6 @@ Python非同期処理超入門
 
    about_asyncio
    gohan
-   gohan2
    coroutine
    task
 
