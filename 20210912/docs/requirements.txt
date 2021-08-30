@@ -1,6 +1,4 @@
 Sphinx
-sphinx-rtd-theme
 insipid-sphinx-theme
 sphinx-revealjs
 sphinx-copybutton
-sphinxcontrib-drawio

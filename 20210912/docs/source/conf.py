@@ -28,10 +28,8 @@ author = "fin-py"
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
-    "sphinx_rtd_theme",
     "sphinx_copybutton",
     "sphinx_revealjs",
-    "sphinxcontrib.drawio",
 ]
 
 # Add any paths that contain templates here, relative to this directory.
