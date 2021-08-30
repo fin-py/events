@@ -9,9 +9,9 @@ Python非同期処理超入門
    :caption: Contents:
 
    about_asyncio
-   coroutine
-   coding_asyncio
    gohan
+   coroutine
+   task
 
 Indices and tables
 ==================
