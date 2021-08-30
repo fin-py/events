@@ -2,85 +2,19 @@
 Python非同期処理超入門
 ======================
 
-asyncioとは
-===========
-
-- async/await 構文を使い並行処理のコードを書くためのライブラリ
-- 非同期フレームワークの基盤
-
-  - ネットワークとウェブサーバ
-  - データベース接続ライブラリ
-  - 分散タスクキュー
-
-- IOバウンドや高レベルの構造化されたネットワークコードに適している
-
-高レベルAPI
------------
-
-- 並行にPythonコルーチンを起動し、実行全体を管理する
-- ネットワークIOとIPCを執り行う
-- subprocessesを管理する
-- キューを使ってタスクを分散する
-- 並列処理のコードを同期させる
-
-低レベルAPI
------------
-
-- 非同期APIを提供するイベントループの作成と管理
-
-  - ネットワーク通信
-  - サブプロセスの実行
-  - OSシグナル
-
-- Transportを使った効率的なprotocolを実装
-- コールバックを用いたライブラリとasync/await構文を使ったコードの橋渡し
-
-コルーチン
-==========
-
 .. revealjs-break::
 
-- サブルーチンのより一般的な形式
-- サブルーチンには決められた地点から入り、別の決められた地点から出る
-- 多くの様々な地点から入る、出る、再開できる
-- `async def <https://docs.python.org/ja/3/reference/compound_stmts.html#async-def>`_ 文で実装できる
+.. toctree::
+   :maxdepth: 2
+   :caption: Contents:
 
-async/await構文で宣言
----------------------
+   about_asyncio
+   coding_asyncio
+   gohan
 
-- asyncioを使ったアプリケーションを書くのに推奨される方法
+Indices and tables
+==================
 
-.. code-block:: python
-   :linenos:
-
-   import asyncio
-
-   async def main():
-      print('hello')
-      await asyncio.sleep(1)
-      print('world')
-
-   asyncio.run(main())
-
-ごはんでまなぶ並行処理
-======================
-
-.. revealjs-break::
-
-.. drawio-image:: gohan.drawio
-   :format: png
-
-- 「米を炊く」と「調理する」は同時にできる
-- 「味噌汁をつくる」が終わってから「おかずをつくる」
-- 「米を炊く」と「調理する」が両方おわったら「いただきます」
-
-コード例
---------
-
-.. literalinclude:: gohan.py
-   :linenos:
-
-出力例
-------
-
-.. literalinclude:: gohan.txt
+* :ref:`genindex`
+* :ref:`modindex`
+* :ref:`search`
