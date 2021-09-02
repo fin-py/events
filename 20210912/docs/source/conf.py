@@ -17,7 +17,7 @@
 
 # -- Project information -----------------------------------------------------
 
-project = "Python非同期処理超入門"
+project = "AIOHTTPハンズオン"
 copyright = "2021, fin-py"
 author = "fin-py"
 
