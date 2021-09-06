@@ -6,9 +6,9 @@ AIOHTTP-Client
 いつ使うべき
 ------------
 
-- 参照：[aiohttpとasyncioを使用したPythonの非同期HTTPリクエスト](https://www.twilio.com/blog/asynchronous-http-requests-in-python-with-aiohttp-jp)
-- [PokéAPI](https://pokeapi.co/)を使ってポケモンを150匹Getする方法を3つ紹介し処理の速さを比較する
-- 利用規約 [Documentation - PokéAPI](https://pokeapi.co/docs/v2#fairuse)
+- 参照：`aiohttpとasyncioを使用したPythonの非同期HTTPリクエスト <https://www.twilio.com/blog/asynchronous-http-requests-in-python-with-aiohttp-jp>`_
+- `PokéAPI <https://pokeapi.co/>`_ を使ってポケモンを150匹Getする方法を3つ紹介し処理の速さを比較する
+- 利用規約 `Documentation - PokéAPI <https://pokeapi.co/docs/v2#fairuse>`_
 
 
 request を使った場合
@@ -17,7 +17,9 @@ request を使った場合
 .. literalinclude:: ./code/pokemon1.py
    :linenos:
 
-.. code-block:: bash
+
+.. code-block:: 
+
    ❯ python src/pokemon1.py 
    :
    :
@@ -32,7 +34,8 @@ request を使った場合
 .. literalinclude:: ./code/pokemon2.py
    :linenos:
 
-.. code-block:: bash
+.. code-block:: 
+
    ❯ python src/pokemon2.py 
    :
    :
@@ -42,13 +45,14 @@ request を使った場合
 - 待っている間に、次のポケモンのリクエストURLを投げる
 - 投げている間に、jsonが返ってきたら、ポケモン ID と name を出力
 
-非同期にリクエストタスクを先に作って session から一気にリクエストする場合
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+リクエストタスクを先に作って非同期にリクエストする場合
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. literalinclude:: ./code/pokemon3.py
    :linenos:
 
-.. code-block:: bash
+.. code-block:: 
+
    ❯ python src/pokemon3.py 
    :
    :

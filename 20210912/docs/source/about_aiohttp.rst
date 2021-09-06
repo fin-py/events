@@ -1,5 +1,5 @@
- AIOHTTP
- =======
+AIOHTTP
+========
 
 - Doc :  `Welcome to AIOHTTP — aiohttp 3.7.4.post0 documentation <https://docs.aiohttp.org/en/stable/index.html>`_
 - 今日の大目的： pybotters の wb.py を読めるようになる、自分で同じコードを書けるようになる。 （非汎用的なやつでいいから）
@@ -32,8 +32,7 @@ Client
 Server
 ~~~~~~
 
-- pass 
-
+- 参照： `Server — aiohttp 3.7.4.post0 documentation <https://docs.aiohttp.org/en/stable/web.html>`_ 
 
 Misc
 ----
@@ -41,11 +40,8 @@ Misc
 AIOHTTP を使う際によく使うツール
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- [multidict](https://pypi.org/project/multidict/)
-   - URLにパラメタを渡す時に使う
-- [yarl](https://pypi.org/project/yarl/)
-   - `ClientSession.get()` は、文字列もしくは yarl.URL インスタンスを引き取る
-
+- `multidict <https://pypi.org/project/multidict/>`_ : URLにパラメタを渡す時に使う
+- `yarl <https://pypi.org/project/yarl/>`_ : `ClientSession.get()` は、文字列もしくは yarl.URL インスタンスを引き取る
 
 
 .. literalinclude:: ./code/aiohttp_gs_misc.py

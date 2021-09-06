@@ -12,6 +12,10 @@ AIOHTTPハンズオン
    gohan
    coroutine
    task
+   about_aiohttp
+   aiohttp_client
+   pybotters_ws
+
 
 Indices and tables
 ==================
