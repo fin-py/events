@@ -1,7 +1,7 @@
  AIOHTTP
  =======
 
-- Doc :  [Welcome to AIOHTTP — aiohttp 3.7.4.post0 documentation](https://docs.aiohttp.org/en/stable/index.html)
+- Doc :  `Welcome to AIOHTTP — aiohttp 3.7.4.post0 documentation <https://docs.aiohttp.org/en/stable/index.html>`_
 - 今日の大目的： pybotters の wb.py を読めるようになる、自分で同じコードを書けるようになる。 （非汎用的なやつでいいから）
 
 特徴

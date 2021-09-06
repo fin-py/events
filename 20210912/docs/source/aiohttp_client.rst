@@ -1,7 +1,7 @@
 AIOHTTP-Client
 ==============
 
-- Doc: [Client — aiohttp 3.7.4.post0 documentation](https://docs.aiohttp.org/en/stable/client.html)
+- Doc: `Client — aiohttp 3.7.4.post0 documentation <https://docs.aiohttp.org/en/stable/client.html>`_ 
 
 いつ使うべき
 ------------
