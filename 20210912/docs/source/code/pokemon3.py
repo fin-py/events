@@ -1,5 +1,5 @@
-import time 
-import asyncio 
+import time
+import asyncio
 
 import aiohttp
 from logzero import logger
@@ -8,23 +8,25 @@ from logzero import logger
 async def get_pokemon(s, url):
     async with s.get(url) as resp:
         pokemon = await resp.json()
-        return (pokemon['id'],pokemon['name'])
+        return (pokemon["id"], pokemon["name"])
+
 
 async def main():
-    async with aiohttp.ClientSession() as s:
-        
+    async with aiohttp.ClientSession() as session:
+
         tasks = list()
-        for num in range(1,151):
+        for num in range(1, 151):
             url = f"https://pokeapi.co/api/v2/pokemon/{num}"
-            tasks.append(asyncio.ensure_future(get_pokemon(s, url)))
-        
+            tasks.append(asyncio.ensure_future(get_pokemon(session, url)))
+
         pokemons = await asyncio.gather(*tasks)
         for pokemon in pokemons:
             logger.info(f"{id}: {pokemon}")
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     start = time.time()
     asyncio.run(main())
     logger.info("end")
     end = time.time()
-    logger.info(end-start)
+    logger.info(end - start)

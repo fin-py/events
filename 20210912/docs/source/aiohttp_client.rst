@@ -9,6 +9,7 @@ AIOHTTP-Client
 - 参照：`aiohttpとasyncioを使用したPythonの非同期HTTPリクエスト <https://www.twilio.com/blog/asynchronous-http-requests-in-python-with-aiohttp-jp>`_
 - `PokéAPI <https://pokeapi.co/>`_ を使ってポケモンを150匹Getする方法を3つ紹介し処理の速さを比較する
 - 利用規約 `Documentation - PokéAPI <https://pokeapi.co/docs/v2#fairuse>`_
+- endpoint: https://pokeapi.co/docs/v2#pokemon
 
 
 request を使った場合
@@ -65,18 +66,36 @@ request を使った場合
 Quickstart
 ----------
 - about_aiohttp.rst よりももうちょっと踏み込んで書く
-- request 
-    - pass parametar
+
+request 
+~~~~~~~
+
+- make request
+
+.. literalinclude:: ./code/aiohttp_qs1.py
+   :linenos:
+
+- `async with` : session context manager. 処理が終わったら session を close してくれる。
+- もし session context manager を使わない場合は以下のように `.close()` メソッドを呼び出し必ずクローズする。
+
+.. literalinclude:: ./code/aiohttp_qs2.py
+   :linenos:
+
+- pass parametar
+
+.. literalinclude:: ./code/aiohttp_qs3.py
+   :linenos:
+
+
+
 - response    
-    - get contents
-    - status code 
-    - binary code 
-    - json 
-    - text
-    - streaming response の扱いかた
+   - get contents
+   - status code 
+   - binary code 
+   - json 
+   - text
+   - streaming response の扱いかた
 
 - websockets
 - timeouts
-
-
 
