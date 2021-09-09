@@ -35,3 +35,8 @@ python entrance.py
 ```
 
 表示されたURLにブラウザからアクセスします
+
+## 資料
+
+- [Webドキュメント](https://aiohttp-hands-on.readthedocs.io/)
+- [スライド](https://fin-py.github.io/events/)
