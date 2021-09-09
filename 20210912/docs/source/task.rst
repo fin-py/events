@@ -56,4 +56,6 @@ asyncio.gatherにTaskを渡した例
 練習問題
 --------
 
-あとでかく
+次のコードの ``get_status_code`` 関数をTaskにして複数実行してください
+
+.. literalinclude:: ./code/aiohttp_request.py
