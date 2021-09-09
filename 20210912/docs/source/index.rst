@@ -12,6 +12,9 @@ AIOHTTPハンズオン
    gohan
    coroutine
    task
+   blocking_nonblocking
+   eventloop
+   reference
    about_aiohttp
    aiohttp_client
    pybotters_ws

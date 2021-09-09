@@ -38,6 +38,7 @@ asyncioとは
 - サブルーチンには決められた地点から入り、別の決められた地点から出る
 - 多くの様々な地点から入る、出る、再開できる
 - `async def <https://docs.python.org/ja/3/reference/compound_stmts.html#async-def>`_ 文で実装できる
+- 実態はジェネレータ
 
 Task
 -----

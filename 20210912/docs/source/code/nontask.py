@@ -8,9 +8,9 @@ async def neru(n):
 
 async def main():
     await neru(2)
-    await neru(3)
+    await neru(5)
 
 
 start = time.time()
-asyncio.run(main(), debug=True)
+asyncio.run(main())
 print(f"time: {time.time() - start}")

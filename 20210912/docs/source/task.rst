@@ -23,15 +23,17 @@ Taskオブジェクトが生成される
 -----------------------------
 
 .. literalinclude:: ./code/nontask.py
+   :linenos:
 
-実行結果: ``time: 5.007220983505249``
+実行結果: ``time: 7.0069193840026855``
 
 Taskを作成して実行
 ------------------
 
 .. literalinclude:: ./code/task.py
+   :linenos:
 
-実行結果: ``time: 3.005479574203491``
+実行結果: ``time: 5.004063844680786``
 
 並行なTask実行
 --------------
@@ -43,17 +45,22 @@ asyncio.gatherにコルーチンを渡した例
 ------------------------------------
 
 .. literalinclude:: ./code/gather_coroutine.py
+   :linenos:
 
-実行結果: ``time: 3.005486011505127``
+実行結果: ``time: 5.007250785827637``
 
 asyncio.gatherにTaskを渡した例
 ------------------------------
 
 .. literalinclude:: ./code/gather_task.py
+   :linenos:
 
-実行結果: ``time: 3.0056073665618896``
+実行結果: ``time: 5.006976842880249``
 
 練習問題
 --------
 
-あとでかく
+次のコードの ``get_status_code`` 関数をTaskにして複数実行してください
+
+.. literalinclude:: ./code/aiohttp_request.py
+   :linenos:
