@@ -9,7 +9,7 @@
 
 ``time.speep`` はブロッキングするので、完了を待ってから次の処理に移る
 
-.. literalinclude:: ./code/sleep_sync.py
+.. literalinclude:: ./code/blocking.py
    :linenos:
 
 実行結果: ``time: 7.009732246398926``

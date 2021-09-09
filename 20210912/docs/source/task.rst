@@ -44,14 +44,14 @@ asyncio.gatherにコルーチンを渡した例
 
 .. literalinclude:: ./code/gather_coroutine.py
 
-実行結果: ``time: 3.005486011505127``
+実行結果: ``time: 5.007250785827637``
 
 asyncio.gatherにTaskを渡した例
 ------------------------------
 
 .. literalinclude:: ./code/gather_task.py
 
-実行結果: ``time: 3.0056073665618896``
+実行結果: ``time: 5.006976842880249``
 
 練習問題
 --------

@@ -12,5 +12,5 @@ async def main():
 
 
 start = time.time()
-asyncio.run(main(), debug=True)
+asyncio.run(main())
 print(f"time: {time.time() - start}")
