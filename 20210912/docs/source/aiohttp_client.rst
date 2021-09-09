@@ -70,32 +70,57 @@ Quickstart
 request 
 ~~~~~~~
 
-- make request
-
+session context manager を使う
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 .. literalinclude:: ./code/aiohttp_qs1.py
    :linenos:
 
 - `async with` : session context manager. 処理が終わったら session を close してくれる。
 - もし session context manager を使わない場合は以下のように `.close()` メソッドを呼び出し必ずクローズする。
 
+session context manager を使わない
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
 .. literalinclude:: ./code/aiohttp_qs2.py
    :linenos:
 
-- pass parametar
+parametar を渡す
+^^^^^^^^^^^^^^^^
 
 .. literalinclude:: ./code/aiohttp_qs3.py
    :linenos:
 
+- 同じキーに対して2つ以上の値を渡したい場合は、`MultiDict <https://multidict.readthedocs.io/en/stable/multidict.html#multidict.MultiDict>`_ もしくは、タプルのリストで渡す
+   - ``MultiDict({'a': [1, 3]})`` 
+   - ``MultiDict([('a', 1), ('a', 3)])`` 
+   - ``([('a', 1), ('a', 3)])`` 
+
+バイナリデータ
+^^^^^^^^^^^^^^
+
+.. literalinclude:: ./code/aiohttp_qs4.py
+   :linenos:
+
+- バイナリデータは ``response.read()`` で取得
+
+streaming response
+^^^^^^^^^^^^^^^^^^
+- ``read()`` ``json()`` ``text()`` は メモリにロードするので、巨大なサイズのファイルの読み込みには `aiohttp.StreamReader <https://docs.aiohttp.org/en/stable/streams.html#aiohttp.StreamReader>`_  のインスタンスの ``.content`` アトリビュートの利用を検討したほうがよい
+- よく使われる方法としては、chunk size を指定してファイル等に書き込むなどする
+
+.. literalinclude:: ./code/aiohttp_qs5.py
+   :linenos:
 
 
-- response    
-   - get contents
-   - status code 
-   - binary code 
-   - json 
-   - text
-   - streaming response の扱いかた
+websockets
+^^^^^^^^^^
 
-- websockets
-- timeouts
+.. literalinclude:: ./code/aiohttp_qs6.py
+   :linenos:
+
+- session を確立後、`aiohttp.ClientSession.ws_connect() <https://docs.aiohttp.org/en/stable/client_quickstart.html#websockets>`_ メソッドでウェブソケットへ接続
+- URL を渡して初期化すると、ウェブソケットサーバーに接続状態になる。
+- `.send_str` メソッドで ping を投げて、`.receive()` メソッドでレスポンスを待つ
+- レスポンスは `aiohttp.WSMessage <https://docs.aiohttp.org/en/stable/websocket_utilities.html#aiohttp.WSMessage>`_ オブジェクト。
+
 
