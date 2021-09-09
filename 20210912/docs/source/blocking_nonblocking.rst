@@ -20,7 +20,7 @@
 - ブロッキングされない
 - ほかの処理ができる
 
-`asyncio.speep <https://docs.python.org/ja/3/library/asyncio-task.html#sleeping>`_ はノンブロッキング処理なので、待っている間に次の処理に移れる
+`asyncio.sleep <https://docs.python.org/ja/3/library/asyncio-task.html#sleeping>`_ はノンブロッキング処理なので、待っている間に次の処理に移れる
 
 .. literalinclude:: ./code/task.py
    :linenos:
