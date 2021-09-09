@@ -7,7 +7,7 @@
 - 処理が終了するまで待つ
 - 待っている間はほかの処理を行えない
 
-``time.speep`` はブロッキングするので、完了を待ってから次の処理に移る
+`time.sleep <https://docs.python.org/ja/3/library/time.html#time.sleep>`_ はブロッキングするので、完了を待ってから次の処理に移る
 
 .. literalinclude:: ./code/blocking.py
    :linenos:
@@ -20,22 +20,24 @@
 - ブロッキングされない
 - ほかの処理ができる
 
-``asyncio.speep`` はノンブロッキング処理なので、待っている間に次の処理に移れる
+`asyncio.speep <https://docs.python.org/ja/3/library/asyncio-task.html#sleeping>`_ はノンブロッキング処理なので、待っている間に次の処理に移れる
 
 .. literalinclude:: ./code/task.py
+   :linenos:
 
 実行結果: ``time: 5.004534006118774``
 
 ノンブロッキング関数の実装
 --------------------------
 
-- ``loop.run_in_executor`` を利用
-- Executorは非同期呼び出しをするためのクラス
+- `loop.run_in_executor <https://docs.python.org/ja/3/library/asyncio-eventloop.html#asyncio.loop.run_in_executor>`_ を利用
+- `Executor <https://docs.python.org/ja/3/library/concurrent.futures.html#concurrent.futures.Executor>`_ は非同期呼び出しをするためのクラス
 
-  - ThreadPoolExecutor
-  - ProcessPoolExecutor
+  - `ThreadPoolExecutor <https://docs.python.org/ja/3/library/concurrent.futures.html#concurrent.futures.ThreadPoolExecutor>`_
+  - `ProcessPoolExecutor <https://docs.python.org/ja/3/library/concurrent.futures.html#processpoolexecutor>`_
 
 .. literalinclude:: ./code/nonblocking_function.py
+   :linenos:
 
 実行結果: ``time: 5.005532503128052``
 
@@ -45,3 +47,4 @@
 次のコードを非同期(ノンブロッキング)に実装してください
 
 .. literalinclude:: ./code/get_request.py
+   :linenos:
