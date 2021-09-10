@@ -29,6 +29,7 @@ author = "fin-py"
 # ones.
 extensions = [
     "sphinx_copybutton",
+    "sphinx_toggleprompt",
     "sphinx_revealjs",
 ]
 
@@ -78,5 +79,9 @@ revealjs_script_plugins = [
 
 # Copybutton
 
-copybutton_prompt_text = r">>> |\.\.\. |\$ |In \[\d*\]: | {2,5}\.\.\.: | {5,8}: |\d+ *"
+copybutton_prompt_text = r">>> |\.\.\. |\$ |In \[\d*\]: | {2,5}\.\.\.: | {5,8}: | *\d+"
 copybutton_prompt_is_regexp = True
+
+# Sphinx-toggleprompt
+
+toggleprompt_offset_right = 30

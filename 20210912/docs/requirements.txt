@@ -2,3 +2,4 @@ Sphinx
 insipid-sphinx-theme
 sphinx-revealjs
 sphinx-copybutton
+sphinx-toggleprompt
