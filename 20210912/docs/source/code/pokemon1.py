@@ -1,7 +1,9 @@
 import time 
 
 import requests
-from logzero import logger 
+import logging
+logging.basicConfig(level=logging.INFO, format="%(asctime)s %(message)s", datefmt="%X")
+
 
 def human_requests():
     for num in range(1,151):
@@ -9,10 +11,10 @@ def human_requests():
         resp = requests.get(url)
         if resp.status_code == 200:
             pokemon = resp.json()
-            logger.info(f"{pokemon['id']}: {pokemon['name']}")
+            logging.info(f"{pokemon['id']}: {pokemon['name']}")
 
 if __name__ == '__main__':
     start = time.time()
     human_requests()
     end = time.time()
-    logger.info(end-start)
+    logging.info(end-start)

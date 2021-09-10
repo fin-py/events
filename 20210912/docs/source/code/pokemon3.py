@@ -1,8 +1,9 @@
 import time
 import asyncio
-
 import aiohttp
-from logzero import logger
+
+import logging
+logging.basicConfig(level=logging.INFO, format="%(asctime)s %(message)s", datefmt="%X")
 
 
 async def get_pokemon(s, url):
@@ -21,12 +22,12 @@ async def main():
 
         pokemons = await asyncio.gather(*tasks)
         for pokemon in pokemons:
-            logger.info(f"{id}: {pokemon}")
+            logging.info(f"{id}: {pokemon}")
 
 
 if __name__ == "__main__":
     start = time.time()
     asyncio.run(main())
-    logger.info("end")
+    logging.info("end")
     end = time.time()
-    logger.info(end - start)
+    logging.info(end - start)
