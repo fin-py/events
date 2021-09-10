@@ -31,6 +31,30 @@ with文のネスト
                 :
 
 
+async for
+---------
+
+- 非同期イテレータ/ジェネレータ用の ``for`` 文
+- 下記２つは同じ意味 
+
+.. code-block:: python
+
+   async for a in async_iterable:
+      await do_a_thing(a)
+
+.. code-block:: python
+
+   it = async_iterable.__aiter__()
+   while True:
+      try:
+         a = await it.__anext__()
+      except StopAsyncIteration:
+         break
+
+      await do_a_thing(a)
+
+- 参照： `Python Asyncio Part 3 – Asynchronous Context Managers and Asynchronous Iterators <https://bbc.github.io/cloudfit-public-docs/asyncio/asyncio-part-3>`_
+
 
 ClientSession
 -------------
@@ -101,10 +125,9 @@ websockets
    :linenos:
 
 - client session を確立後、`aiohttp.ClientSession.ws_connect() <https://docs.aiohttp.org/en/stable/client_reference.html#aiohttp.ClientSession.ws_connect>`_ メソッドでウェブソケットへ接続
-- 返り値は `aiohttp.ClientWebSocketResponse <https://docs.aiohttp.org/en/stable/client_reference.html#aiohttp.ClientWebSocketResponse>`_
-- URL を渡して初期化すると、ウェブソケットサーバーに接続状態になる。
-- `.send_str <https://docs.aiohttp.org/en/stable/client_reference.html#aiohttp.ClientWebSocketResponse.send_str>`_ メソッドで ping を投げて、 `.receive() <https://docs.aiohttp.org/en/stable/client_reference.html#aiohttp.ClientWebSocketResponse.receive>`_ メソッドでレスポンスを待つ。
-   - `.send_json <https://docs.aiohttp.org/en/stable/client_reference.html#aiohttp.ClientWebSocketResponse.send_json>`_ メソッドで json を投げることも可
--  `.receive() <https://docs.aiohttp.org/en/stable/client_reference.html#aiohttp.ClientWebSocketResponse.receive>`_ の返り値は `aiohttp.WSMessage <https://docs.aiohttp.org/en/stable/websocket_utilities.html#aiohttp.WSMessage>`_ オブジェクト。その ``type`` 属性が `aiohttp.WSMsgType <https://docs.aiohttp.org/en/stable/websocket_utilities.html#aiohttp.WSMsgType>`_ で、そのタイプによって処理を切り分ける
+- URL を渡して初期化すると、ウェブソケットサーバーに接続状態になる。返り値は `aiohttp.ClientWebSocketResponse <https://docs.aiohttp.org/en/stable/client_reference.html#aiohttp.ClientWebSocketResponse>`_ 。(以下 ``ws`` で表現)
+- `ws.send_str <https://docs.aiohttp.org/en/stable/client_reference.html#aiohttp.ClientWebSocketResponse.send_str>`_ メソッドで ping を投げて、 `ws.receive() <https://docs.aiohttp.org/en/stable/client_reference.html#aiohttp.ClientWebSocketResponse.receive>`_ メソッドでレスポンスを待つ。
+   - `ws.send_json <https://docs.aiohttp.org/en/stable/client_reference.html#aiohttp.ClientWebSocketResponse.send_json>`_ メソッドで json を投げることも可
+-  `ws.receive() <https://docs.aiohttp.org/en/stable/client_reference.html#aiohttp.ClientWebSocketResponse.receive>`_ の返り値は `aiohttp.WSMessage <https://docs.aiohttp.org/en/stable/websocket_utilities.html#aiohttp.WSMessage>`_ オブジェクト。その ``type`` 属性が `aiohttp.WSMsgType <https://docs.aiohttp.org/en/stable/websocket_utilities.html#aiohttp.WSMsgType>`_ で、そのタイプによって処理を切り分ける
 
 

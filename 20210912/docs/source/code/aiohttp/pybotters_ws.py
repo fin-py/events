@@ -11,7 +11,7 @@ async def main():
         async with session.ws_connect("wss://ftx.com/ws") as ws:
             # サブスクライブ
             await ws.send_str(
-                '{"op": "subscribe", "channel": "trades", "market": "BTT-PERP"}'
+                '{"op": "subscribe", "channel": "trades", "market": "BTC-PERP"}'
             )
             async for msg in ws:
                 if msg.type == aiohttp.WSMsgType.TEXT:
@@ -20,5 +20,4 @@ async def main():
                     break
 
 
-loop = asyncio.get_event_loop()
-loop.run_until_complete(main())
+asyncio.run(main())

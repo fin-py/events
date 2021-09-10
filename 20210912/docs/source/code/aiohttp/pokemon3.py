@@ -3,6 +3,7 @@ import asyncio
 import aiohttp
 
 import logging
+
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(message)s", datefmt="%X")
 
 
@@ -18,7 +19,7 @@ async def main():
         tasks = list()
         for num in range(1, 151):
             url = f"https://pokeapi.co/api/v2/pokemon/{num}"
-            tasks.append(asyncio.ensure_future(get_pokemon(session, url)))
+            tasks.append(asyncio.create_task(get_pokemon(session, url)))
 
         pokemons = await asyncio.gather(*tasks)
         for id, pokemon in pokemons:
