@@ -2,8 +2,6 @@ AIOHTTP
 ========
 
 - Doc :  `Welcome to AIOHTTP — aiohttp 3.7.4.post0 documentation <https://docs.aiohttp.org/en/stable/index.html>`_
-- 今日の大目的： pybotters の wb.py を読めるようになる、自分で同じコードを書けるようになる。 （非汎用的なやつでいいから）
-
 
 特徴
 ----
@@ -24,7 +22,7 @@ Getting Started
 Client
 ~~~~~~
 
-.. literalinclude:: ./code/aiohttp_gs_client.py
+.. literalinclude:: ./code/aiohttp/aiohttp_gs_client.py
    :linenos:
 
 - アクセス先の利用規約を必ず確認する
@@ -44,7 +42,12 @@ AIOHTTP を使う際によく使うツール
 - `yarl <https://pypi.org/project/yarl/>`_ : `ClientSession.get()` は、文字列もしくは yarl.URL インスタンスを引き取る
 
 
-.. literalinclude:: ./code/aiohttp_gs_misc.py
+.. literalinclude:: ./code/aiohttp/aiohttp_gs_misc.py
    :linenos:
 
+出力
 
+.. code-block:: 
+
+    https://connpass.com/explore
+    https://connpass.com/search?q=aiohttp

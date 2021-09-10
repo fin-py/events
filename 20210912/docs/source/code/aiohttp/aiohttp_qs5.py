@@ -12,6 +12,4 @@ async def main():
                 f.write(chunk)
 
 
-loop = asyncio.get_event_loop()
-loop.run_until_complete(main())
-
+asyncio.run(main())
