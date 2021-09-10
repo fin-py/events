@@ -8,8 +8,8 @@ AIOHTTPハンズオン
    :maxdepth: 2
    :caption: Contents:
 
-   about_asyncio
    gohan
+   about_asyncio
    coroutine
    task
    blocking_nonblocking

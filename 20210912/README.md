@@ -9,7 +9,7 @@ Zoomのリンクは下記の手順を実施して出力されたURLにアクセ�
 
 次の環境を前提としています
 
-- Pythonが実行できる
+- Python3.7以降が実行できる
 - [AIOHTTP](https://docs.aiohttp.org/en/stable/index.html) がインストールされている( `import aiohttp` ができる)
 
 ### スクリプトの実行
