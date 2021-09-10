@@ -13,8 +13,7 @@ def human_requests():
             pokemon = resp.json()
             logging.info(f"{pokemon['id']}: {pokemon['name']}")
 
-if __name__ == '__main__':
-    start = time.time()
-    human_requests()
-    end = time.time()
-    logging.info(end-start)
+start = time.time()
+human_requests()
+end = time.time()
+logging.info(f"実行結果: time: {end-start}")

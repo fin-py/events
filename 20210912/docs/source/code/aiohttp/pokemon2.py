@@ -14,8 +14,7 @@ async def main():
                 logging.info(f"{pokemon['id']}: {pokemon['name']}")
 
 
-if __name__ == "__main__":
-    start = time.time()
-    asyncio.run(main())
-    end = time.time()
-    logging.info(end - start)
+start = time.time()
+asyncio.run(main())
+end = time.time()
+logging.info(f"実行結果: time: {end-start}")

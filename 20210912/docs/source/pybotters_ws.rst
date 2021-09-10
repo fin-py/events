@@ -15,7 +15,7 @@ AIOHTTP-Client ハンズオン
 - ftx を使って非汎用的だが、とりあえず動くモノを作る
 
 
-.. literalinclude:: ./code/pybotters_ws.py
+.. literalinclude:: ./code/aiohttp/pybotters_ws.py
    :linenos:
 
 `send_str <https://docs.aiohttp.org/en/stable/web_reference.html?highlight=send_str#aiohttp.web.WebSocketResponse.send_str>`_ 

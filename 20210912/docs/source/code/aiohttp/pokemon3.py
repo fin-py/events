@@ -21,13 +21,12 @@ async def main():
             tasks.append(asyncio.ensure_future(get_pokemon(session, url)))
 
         pokemons = await asyncio.gather(*tasks)
-        for pokemon in pokemons:
+        for id, pokemon in pokemons:
             logging.info(f"{id}: {pokemon}")
 
 
-if __name__ == "__main__":
-    start = time.time()
-    asyncio.run(main())
-    logging.info("end")
-    end = time.time()
-    logging.info(end - start)
+start = time.time()
+asyncio.run(main())
+logging.info("end")
+end = time.time()
+logging.info(f"実行結果: time: {end-start}")

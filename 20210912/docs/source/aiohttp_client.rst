@@ -1,95 +1,77 @@
-AIOHTTP-Client
-==============
+AIOHTTP-Client Quickstart
+==========================
 
 - Doc: `Client — aiohttp 3.7.4.post0 documentation <https://docs.aiohttp.org/en/stable/client.html>`_ 
 
-いつ使うべき
-------------
-
-- 参照：`aiohttpとasyncioを使用したPythonの非同期HTTPリクエスト <https://www.twilio.com/blog/asynchronous-http-requests-in-python-with-aiohttp-jp>`_
-- `PokéAPI <https://pokeapi.co/>`_ を使ってポケモンを150匹Getする方法を3つ紹介し処理の速さを比較する
-- 利用規約 `Documentation - PokéAPI <https://pokeapi.co/docs/v2#fairuse>`_
-- endpoint: https://pokeapi.co/docs/v2#pokemon
-
-
-request を使った場合
-~~~~~~~~~~~~~~~~~~~~
-
-.. literalinclude:: ./code/pokemon1.py
-   :linenos:
-
-
-.. code-block:: 
-
-   ❯ python src/pokemon1.py 
-   :
-   :
-   [I 210906 16:34:57 pokemon:46] 5.724557876586914
-
-- ポケモンURLにリスクエストを投げて、レスポンスを待ち、受け取ったらポケモン ID と name を出力
-- これを1から150番まで順番に行う
-
-非同期にリクエストをする場合
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-.. literalinclude:: ./code/pokemon2.py
-   :linenos:
-
-.. code-block:: 
-
-   ❯ python src/pokemon2.py 
-   :
-   :
-   [I 210906 16:46:24 pokemon:47] 2.2340128421783447
-
-- `pokemon = await resp.json()` でbody をjsonで要求するリクエストを投げて戻ってくるのを待つ。
-- 待っている間に、次のポケモンのリクエストURLを投げる
-- 投げている間に、jsonが返ってきたら、ポケモン ID と name を出力
-
-リクエストタスクを先に作って非同期にリクエストする場合
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-.. literalinclude:: ./code/pokemon3.py
-   :linenos:
-
-.. code-block:: 
-
-   ❯ python src/pokemon3.py 
-   :
-   :
-   [I 210906 16:52:55 pokemon_2:30] 0.4318504333496094
-
-- まずは非同期リクエスト用のタスクリストを作成し、 `asyncio.ensure_future <https://docs.python.org/3/library/asyncio-future.html#asyncio.ensure_future>`_ へ渡す。 これで、出力時にタスクを登録したリストの順序が維持される。
-- このタスクリストを `asyncio.gather <https://docs.python.org/3/library/asyncio-task.html#running-tasks-concurrently>`_ へ渡して全てのタスクを同時に実行する。この実行を `await` して全部完了するまで待つ
-
-
-Quickstart
+async with
 ----------
-- about_aiohttp.rst よりももうちょっと踏み込んで書く
 
-request 
-~~~~~~~
-
-session context manager を使う
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-.. literalinclude:: ./code/aiohttp_qs1.py
+.. literalinclude:: ./code/aiohttp/aiohttp_qs1.py
    :linenos:
 
-- `async with` : session context manager. 処理が終わったら session を close してくれる。
-- もし session context manager を使わない場合は以下のように `.close()` メソッドを呼び出し必ずクローズする。
+- 非同期のコンテキストマネージャ
+- ClientSessionを使った処理が終わったら session を close してくれる。
+- もし session context manager を使わない場合は以下のように ``.close()`` メソッドを呼び出し必ずクローズする。
 
-session context manager を使わない
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-.. literalinclude:: ./code/aiohttp_qs2.py
+.. literalinclude:: ./code/aiohttp/aiohttp_qs2.py
    :linenos:
 
-parametar を渡す
-^^^^^^^^^^^^^^^^
+with文のネスト
+^^^^^^^^^^^^^^
 
-.. literalinclude:: ./code/aiohttp_qs3.py
+- `Python 3.10の新機能(その2） with文のネスト: Python3.10の新機能 <https://www.python.jp/news/wnpython310/with-statement.html>`_
+- これを async with でもやってみたところ出来ました。
+- (実はpython3.9でも可)
+
+.. code-block:: python
+
+    async with (aiohttp.ClientSession() as session,
+                session.get("http://httpbin.org/get") as resp):
+                :
+                :
+
+
+
+ClientSession
+-------------
+
+- `aiohttp.ClientSession <https://docs.aiohttp.org/en/stable/client_reference.html#aiohttp.ClientSession>`_
+- クライアントセッションクラス。
+- インスタンス化して(以下 ``session`` で表現)、そのオブジェクトメソッドを使ってリクエストを行う
+
+
+session.request()
+^^^^^^^^^^^^^^^^^
+- `aiohttp.ClientSession.request <https://docs.aiohttp.org/en/stable/client_reference.html?highlight=async%20with#aiohttp.ClientSession.request>`_ 
+- 非同期のHTTPリクエストを実行
+- 返り値は `aiohttp.ClientResponse <https://docs.aiohttp.org/en/stable/client_reference.html?highlight=async%20with#aiohttp.ClientResponse>`_ インスタンスオブジェクト
+- 引数(必須)
+   - ``method (str)`` – HTTP method
+   - ``url`` – URL。文字列もしくは yarl URL オブジェクト
+- オプション引数：ドキュメント参照
+
+session.get()
+^^^^^^^^^^^^^
+- `aiohttp.ClientSession.get <https://docs.aiohttp.org/en/stable/client_reference.html?highlight=async%20with#aiohttp.ClientSession.get>`_
+- GET リクエスト
+- ``session.request()`` の第一引数が `GET` に固定されているメソッド
+- 引数(必須)
+   - ``url`` – URL。文字列もしくは yarl URL オブジェクト
+- オプション引数：ドキュメント参照
+- 返り値は `aiohttp.ClientResponse <https://docs.aiohttp.org/en/stable/client_reference.html?highlight=async%20with#aiohttp.ClientResponse>`_ インスタンスオブジェクト
+
+その他HTTPメソッド
+^^^^^^^^^^^^^^^^^^
+- `.post() <https://docs.aiohttp.org/en/stable/client_reference.html?highlight=async%20with#aiohttp.ClientSession.post>`_ `.put() <https://docs.aiohttp.org/en/stable/client_reference.html?highlight=async%20with#aiohttp.ClientSession.put>`_ `.delete() <https://docs.aiohttp.org/en/stable/client_reference.html?highlight=async%20with#aiohttp.ClientSession.delete>`_ `.patch() <https://docs.aiohttp.org/en/stable/client_reference.html?highlight=async%20with#aiohttp.ClientSession.patch>`_ 等用意されている。
+- 返り値は `aiohttp.ClientResponse <https://docs.aiohttp.org/en/stable/client_reference.html?highlight=async%20with#aiohttp.ClientResponse>`_ インスタンスオブジェクト
+
+URLリクエストにパラメータ を渡す
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. literalinclude:: ./code/aiohttp/aiohttp_qs3.py
    :linenos:
 
+- ``params`` オプションで渡す
 - 同じキーに対して2つ以上の値を渡したい場合は、`MultiDict <https://multidict.readthedocs.io/en/stable/multidict.html#multidict.MultiDict>`_ もしくは、タプルのリストで渡す
    - ``MultiDict({'a': [1, 3]})`` 
    - ``MultiDict([('a', 1), ('a', 3)])`` 
@@ -98,29 +80,31 @@ parametar を渡す
 バイナリデータ
 ^^^^^^^^^^^^^^
 
-.. literalinclude:: ./code/aiohttp_qs4.py
+.. literalinclude:: ./code/aiohttp/aiohttp_qs4.py
    :linenos:
 
-- バイナリデータは ``response.read()`` で取得
+- バイナリデータは `response <https://docs.aiohttp.org/en/stable/client_reference.html?highlight=async%20with#aiohttp.ClientResponse>`_ オブジェクトの `.read() <https://docs.aiohttp.org/en/stable/client_reference.html?highlight=async%20with#aiohttp.ClientResponse.read>`_  で取得可
 
 streaming response
 ^^^^^^^^^^^^^^^^^^
 - ``read()`` ``json()`` ``text()`` は メモリにロードするので、巨大なサイズのファイルの読み込みには `aiohttp.StreamReader <https://docs.aiohttp.org/en/stable/streams.html#aiohttp.StreamReader>`_  のインスタンスの ``.content`` アトリビュートの利用を検討したほうがよい
 - よく使われる方法としては、chunk size を指定してファイル等に書き込むなどする
 
-.. literalinclude:: ./code/aiohttp_qs5.py
+.. literalinclude:: ./code/aiohttp/aiohttp_qs5.py
    :linenos:
 
 
 websockets
 ^^^^^^^^^^
 
-.. literalinclude:: ./code/aiohttp_qs6.py
+.. literalinclude:: ./code/aiohttp/aiohttp_qs6.py
    :linenos:
 
-- session を確立後、`aiohttp.ClientSession.ws_connect() <https://docs.aiohttp.org/en/stable/client_quickstart.html#websockets>`_ メソッドでウェブソケットへ接続
+- client session を確立後、`aiohttp.ClientSession.ws_connect() <https://docs.aiohttp.org/en/stable/client_reference.html#aiohttp.ClientSession.ws_connect>`_ メソッドでウェブソケットへ接続
+- 返り値は `aiohttp.ClientWebSocketResponse <https://docs.aiohttp.org/en/stable/client_reference.html#aiohttp.ClientWebSocketResponse>`_
 - URL を渡して初期化すると、ウェブソケットサーバーに接続状態になる。
-- `.send_str` メソッドで ping を投げて、`.receive()` メソッドでレスポンスを待つ
-- レスポンスは `aiohttp.WSMessage <https://docs.aiohttp.org/en/stable/websocket_utilities.html#aiohttp.WSMessage>`_ オブジェクト。
+- `.send_str <https://docs.aiohttp.org/en/stable/client_reference.html#aiohttp.ClientWebSocketResponse.send_str>`_ メソッドで ping を投げて、 `.receive() <https://docs.aiohttp.org/en/stable/client_reference.html#aiohttp.ClientWebSocketResponse.receive>`_ メソッドでレスポンスを待つ。
+   - `.send_json <https://docs.aiohttp.org/en/stable/client_reference.html#aiohttp.ClientWebSocketResponse.send_json>`_ メソッドで json を投げることも可
+-  `.receive() <https://docs.aiohttp.org/en/stable/client_reference.html#aiohttp.ClientWebSocketResponse.receive>`_ の返り値は `aiohttp.WSMessage <https://docs.aiohttp.org/en/stable/websocket_utilities.html#aiohttp.WSMessage>`_ オブジェクト。その ``type`` 属性が `aiohttp.WSMsgType <https://docs.aiohttp.org/en/stable/websocket_utilities.html#aiohttp.WSMsgType>`_ で、そのタイプによって処理を切り分ける
 
 

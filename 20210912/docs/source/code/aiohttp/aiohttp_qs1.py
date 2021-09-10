@@ -8,7 +8,4 @@ async def main():
             print(resp.status)
             print(await resp.json())
 
-
-loop = asyncio.get_event_loop()
-loop.run_until_complete(main())
-
+asyncio.run(main())
