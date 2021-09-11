@@ -12,6 +12,7 @@ AIOHTTPハンズオン
    about_asyncio
    coroutine
    task
+   wait
    blocking_nonblocking
    eventloop
    reference

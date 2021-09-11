@@ -1,0 +1,5 @@
+<Task finished name='Task-2' coro=<sleep() done, defined at /usr/local/lib/python3.9/asyncio/tasks.py:636> result=None> in done: True
+<Task finished name='Task-2' coro=<sleep() done, defined at /usr/local/lib/python3.9/asyncio/tasks.py:636> result=None> in pending: False
+<Task pending name='Task-3' coro=<sleep() running at /usr/local/lib/python3.9/asyncio/tasks.py:654> wait_for=<Future pending cb=[<TaskWakeupMethWrapper object at 0x7fe15a347400>()]>> in done: False
+<Task pending name='Task-3' coro=<sleep() running at /usr/local/lib/python3.9/asyncio/tasks.py:654> wait_for=<Future pending cb=[<TaskWakeupMethWrapper object at 0x7fe15a347400>()]>> in pending: True
+time: 1.0022432804107666

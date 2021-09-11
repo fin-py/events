@@ -1,0 +1,14 @@
+result=1
+result=2
+Traceback (most recent call last):
+  File "/home/driller/repo/events/20210912/docs/source/code/as_completed.py", line 17, in <module>
+    asyncio.run(main())
+  File "/usr/local/lib/python3.9/asyncio/runners.py", line 44, in run
+    return loop.run_until_complete(main)
+  File "/usr/local/lib/python3.9/asyncio/base_events.py", line 642, in run_until_complete
+    return future.result()
+  File "/home/driller/repo/events/20210912/docs/source/code/as_completed.py", line 12, in main
+    result = await f
+  File "/usr/local/lib/python3.9/asyncio/tasks.py", line 613, in _wait_for_one
+    raise exceptions.TimeoutError
+asyncio.exceptions.TimeoutError
