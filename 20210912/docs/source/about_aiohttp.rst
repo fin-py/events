@@ -25,7 +25,15 @@ Client
 .. literalinclude:: ./code/aiohttp/aiohttp_gs_client.py
    :linenos:
 
-- アクセス先の利用規約を必ず確認する
+.. code-block:: python
+
+   # windows の場合、
+   # asyncio.run() の前に asyncio.set_event_loop_policy() をセット
+   # する必要があるかもしれません
+   asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
+   asyncio.run(main())
+
+
 
 Server
 ~~~~~~

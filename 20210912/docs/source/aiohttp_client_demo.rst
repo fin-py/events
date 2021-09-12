@@ -53,4 +53,10 @@ Requests を使った場合
 
 実行結果: ``time: 0.4347381591796875``
 
+- 返り値の順番は気にせず、通信が終わった順に取得する場合
+
+.. literalinclude:: ./code/aiohttp/pokemon4.py
+   :linenos:
+
+
 
