@@ -6,7 +6,7 @@ AIOHTTP
 特徴
 ----
 
-- 非同期通信するための HTTP Client / Server ツール
+- 非同期HTTP通信するための Client / Server ツール
 
 インストール
 ------------
@@ -33,13 +33,13 @@ Server
 - 参照： `Server — aiohttp 3.7.4.post0 documentation <https://docs.aiohttp.org/en/stable/web.html>`_ 
 
 Misc
-----
+~~~~
 
 AIOHTTP を使う際によく使うツール
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-- `multidict <https://pypi.org/project/multidict/>`_ : URLにパラメタを渡す時に使う
-- `yarl <https://pypi.org/project/yarl/>`_ : `ClientSession.get()` は、文字列もしくは yarl.URL インスタンスを引き取る
+- `multidict <https://pypi.org/project/multidict/>`_ : URLにパラメタを渡す時に使う。参照： :ref:`parameter` 
+- `yarl <https://pypi.org/project/yarl/>`_ : ``ClientSession.get()`` などの HTTPメソッドは、文字列URLもしくは yarl.URL インスタンスを引き取る
 
 
 .. literalinclude:: ./code/aiohttp/aiohttp_gs_misc.py

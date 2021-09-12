@@ -68,11 +68,12 @@ session.request()
 ^^^^^^^^^^^^^^^^^
 - `aiohttp.ClientSession.request <https://docs.aiohttp.org/en/stable/client_reference.html?highlight=async%20with#aiohttp.ClientSession.request>`_ 
 - 非同期のHTTPリクエストを実行
-- 返り値は `aiohttp.ClientResponse <https://docs.aiohttp.org/en/stable/client_reference.html?highlight=async%20with#aiohttp.ClientResponse>`_ インスタンスオブジェクト
 - 引数(必須)
    - ``method (str)`` – HTTP method
    - ``url`` – URL。文字列もしくは yarl URL オブジェクト
 - オプション引数：ドキュメント参照
+- 返り値は `aiohttp.ClientResponse <https://docs.aiohttp.org/en/stable/client_reference.html?highlight=async%20with#aiohttp.ClientResponse>`_ インスタンスオブジェクト
+
 
 session.get()
 ^^^^^^^^^^^^^
@@ -84,30 +85,55 @@ session.get()
 - オプション引数：ドキュメント参照
 - 返り値は `aiohttp.ClientResponse <https://docs.aiohttp.org/en/stable/client_reference.html?highlight=async%20with#aiohttp.ClientResponse>`_ インスタンスオブジェクト
 
-その他HTTPメソッド
-^^^^^^^^^^^^^^^^^^
-- `.post() <https://docs.aiohttp.org/en/stable/client_reference.html?highlight=async%20with#aiohttp.ClientSession.post>`_ `.put() <https://docs.aiohttp.org/en/stable/client_reference.html?highlight=async%20with#aiohttp.ClientSession.put>`_ `.delete() <https://docs.aiohttp.org/en/stable/client_reference.html?highlight=async%20with#aiohttp.ClientSession.delete>`_ `.patch() <https://docs.aiohttp.org/en/stable/client_reference.html?highlight=async%20with#aiohttp.ClientSession.patch>`_ 等用意されている。
-- 返り値は `aiohttp.ClientResponse <https://docs.aiohttp.org/en/stable/client_reference.html?highlight=async%20with#aiohttp.ClientResponse>`_ インスタンスオブジェクト
+.. _parameter: 
 
 URLリクエストにパラメータ を渡す
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. literalinclude:: ./code/aiohttp/aiohttp_qs3.py
    :linenos:
 
 - ``params`` オプションで渡す
 - 同じキーに対して2つ以上の値を渡したい場合は、`MultiDict <https://multidict.readthedocs.io/en/stable/multidict.html#multidict.MultiDict>`_ もしくは、タプルのリストで渡す
+
    - ``MultiDict({'a': [1, 3]})`` 
    - ``MultiDict([('a', 1), ('a', 3)])`` 
    - ``([('a', 1), ('a', 3)])`` 
 
-バイナリデータ
-^^^^^^^^^^^^^^
+
+その他HTTPメソッド
+^^^^^^^^^^^^^^^^^^
+- `.post() <https://docs.aiohttp.org/en/stable/client_reference.html?highlight=async%20with#aiohttp.ClientSession.post>`_ `.put() <https://docs.aiohttp.org/en/stable/client_reference.html?highlight=async%20with#aiohttp.ClientSession.put>`_ `.delete() <https://docs.aiohttp.org/en/stable/client_reference.html?highlight=async%20with#aiohttp.ClientSession.delete>`_ `.patch() <https://docs.aiohttp.org/en/stable/client_reference.html?highlight=async%20with#aiohttp.ClientSession.patch>`_ 等用意されている。
+- 返り値は `aiohttp.ClientResponse <https://docs.aiohttp.org/en/stable/client_reference.html?highlight=async%20with#aiohttp.ClientResponse>`_ インスタンスオブジェクト
+
+
+ClientResponse
+---------------
+
+- `aiohttp.ClientResponse <https://docs.aiohttp.org/en/stable/client_reference.html?highlight=async%20with#aiohttp.ClientResponse>`_ 
+- ``session.request()`` とそのファミリーが返すクラス
+- API call だけがインスタンス化する(以下 ``resp`` と表現する)
+- ユーザがこのクラスをインスタンス化することは一切ない
+- コンテキストマネージャ ``async with`` での処理が完了すると release される
+
+- 主なインスタンスメソッド
+   - `resp.read() <https://docs.aiohttp.org/en/stable/client_reference.html?highlight=async%20with#aiohttp.ClientResponse.read>`_ : レスポンス body を byte で読み込む。
+   - `resp.text(encoding=None) <https://docs.aiohttp.org/en/stable/client_reference.html?highlight=async%20with#aiohttp.ClientResponse.text>`_: レスポンス body を文字列で読み込む。エンコーディング指定可
+   - `resp.json(encoding=None) <https://docs.aiohttp.org/en/stable/client_reference.html?highlight=async%20with#aiohttp.ClientResponse.json>`_ : レスポンス body を JSON で読み込み、辞書型オブジェクトで返す。エンコーディング指定可
+
+
+.. _binary: 
+
+
+バイナリデータの読み込み
+^^^^^^^^^^^^^^^^^^^^^^^^
+
+- バイナリデータは `.read() <https://docs.aiohttp.org/en/stable/client_reference.html?highlight=async%20with#aiohttp.ClientResponse.read>`_  で取得可
 
 .. literalinclude:: ./code/aiohttp/aiohttp_qs4.py
    :linenos:
 
-- バイナリデータは `response <https://docs.aiohttp.org/en/stable/client_reference.html?highlight=async%20with#aiohttp.ClientResponse>`_ オブジェクトの `.read() <https://docs.aiohttp.org/en/stable/client_reference.html?highlight=async%20with#aiohttp.ClientResponse.read>`_  で取得可
+
 
 streaming response
 ^^^^^^^^^^^^^^^^^^
@@ -117,6 +143,7 @@ streaming response
 .. literalinclude:: ./code/aiohttp/aiohttp_qs5.py
    :linenos:
 
+.. _websockets: 
 
 websockets
 ^^^^^^^^^^
@@ -124,10 +151,8 @@ websockets
 .. literalinclude:: ./code/aiohttp/aiohttp_qs6.py
    :linenos:
 
-- client session を確立後、`aiohttp.ClientSession.ws_connect() <https://docs.aiohttp.org/en/stable/client_reference.html#aiohttp.ClientSession.ws_connect>`_ メソッドでウェブソケットへ接続
-- URL を渡して初期化すると、ウェブソケットサーバーに接続状態になる。返り値は `aiohttp.ClientWebSocketResponse <https://docs.aiohttp.org/en/stable/client_reference.html#aiohttp.ClientWebSocketResponse>`_ 。(以下 ``ws`` で表現)
-- `ws.send_str <https://docs.aiohttp.org/en/stable/client_reference.html#aiohttp.ClientWebSocketResponse.send_str>`_ メソッドで ping を投げて、 `ws.receive() <https://docs.aiohttp.org/en/stable/client_reference.html#aiohttp.ClientWebSocketResponse.receive>`_ メソッドでレスポンスを待つ。
-   - `ws.send_json <https://docs.aiohttp.org/en/stable/client_reference.html#aiohttp.ClientWebSocketResponse.send_json>`_ メソッドで json を投げることも可
--  `ws.receive() <https://docs.aiohttp.org/en/stable/client_reference.html#aiohttp.ClientWebSocketResponse.receive>`_ の返り値は `aiohttp.WSMessage <https://docs.aiohttp.org/en/stable/websocket_utilities.html#aiohttp.WSMessage>`_ オブジェクト。その ``type`` 属性が `aiohttp.WSMsgType <https://docs.aiohttp.org/en/stable/websocket_utilities.html#aiohttp.WSMsgType>`_ で、そのタイプによって処理を切り分ける
-
-
+* client session を確立後、`aiohttp.ClientSession.ws_connect() <https://docs.aiohttp.org/en/stable/client_reference.html#aiohttp.ClientSession.ws_connect>`_ メソッドでウェブソケットへ接続
+* URL を渡して初期化すると、ウェブソケットサーバーに接続状態になる。返り値は `aiohttp.ClientWebSocketResponse <https://docs.aiohttp.org/en/stable/client_reference.html#aiohttp.ClientWebSocketResponse>`_ 。(以下 ``ws`` で表現)
+* `ws.send_str() <https://docs.aiohttp.org/en/stable/client_reference.html#aiohttp.ClientWebSocketResponse.send_str>`_ メソッドで ping を投げて `ws.receive() <https://docs.aiohttp.org/en/stable/client_reference.html#aiohttp.ClientWebSocketResponse.receive>`_ メソッドでレスポンスを待つ。
+* `ws.send_json() <https://docs.aiohttp.org/en/stable/client_reference.html#aiohttp.ClientWebSocketResponse.send_json>`_ メソッドで json を投げることも可
+* `ws.receive() <https://docs.aiohttp.org/en/stable/client_reference.html#aiohttp.ClientWebSocketResponse.receive>`_ の返り値は `aiohttp.WSMessage <https://docs.aiohttp.org/en/stable/websocket_utilities.html#aiohttp.WSMessage>`_ オブジェクト。その ``type`` 属性が `aiohttp.WSMsgType <https://docs.aiohttp.org/en/stable/websocket_utilities.html#aiohttp.WSMsgType>`_ で、そのタイプによって処理を切り分ける

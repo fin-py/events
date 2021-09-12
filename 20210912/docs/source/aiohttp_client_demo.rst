@@ -16,6 +16,11 @@ Requests を使った場合
 
 - `Requests <https://docs.python-requests.org/en/master/>`_ を使って通常のHTTPリクエストでAPIへアクセスする
 
+
+.. code-block:: bash
+
+   $ pip install requests
+
 .. literalinclude:: ./code/aiohttp/pokemon1.py
    :linenos:
 
@@ -37,11 +42,11 @@ Requests を使った場合
 実行結果: ``time: 2.4725234508514404``
 
 
-リクエストタスクを先に作って非同期にリクエストする場合
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+タスクリストを先に作って非同期にリクエストする場合
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 - まずは非同期リクエスト用のタスクリストを作成し、 `asyncio.create_task <https://docs.python.org/3/library/asyncio-task.html#asyncio.create_task>`_ へ渡す。
-- このタスクリストを `asyncio.gather <https://docs.python.org/3/library/asyncio-task.html#running-tasks-concurrently>`_ へ渡して全てのタスクを同時に実行する。この実行を `await` して全部完了するまで待つ。返り値の順序は、``create_task`` で作った順序と同じ。
+- このタスクリストを `asyncio.gather <https://docs.python.org/3/library/asyncio-task.html#running-tasks-concurrently>`_ へ渡して全てのタスクを並行に実行する。この実行を `await` して全部完了するまで待つ。返り値の順序は、``create_task`` で作った順序と同じ。
 
 .. literalinclude:: ./code/aiohttp/pokemon3.py
    :linenos:

@@ -19,7 +19,7 @@ AIOHTTPハンズオン
    about_aiohttp
    aiohttp_client_demo
    aiohttp_client
-   pybotters_ws
+   aiohttp_exercise
 
 
 Indices and tables
