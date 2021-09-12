@@ -9,7 +9,7 @@ def _get_status_code(url):
 
 
 async def get_status_code(cor_name, n):
-    loop = asyncio.get_event_loop()
+    loop = asyncio.get_running_loop()
     url = f"https://httpbin.org/delay/{n}"
     http_status = await loop.run_in_executor(None, _get_status_code, url)
     print(f"{cor_name}: {http_status}")
