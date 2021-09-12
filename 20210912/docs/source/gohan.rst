@@ -10,10 +10,10 @@
 コード例
 --------
 
-.. literalinclude:: ./code/gohan.py
+.. literalinclude:: ./code/asyncio/gohan.py
    :linenos:
 
 出力例
 ------
 
-.. literalinclude:: ./code/gohan.txt
+.. literalinclude:: ./code/asyncio/gohan.txt

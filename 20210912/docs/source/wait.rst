@@ -29,7 +29,7 @@ asyncio.wait_for
 - awaitableオブジェクトがコルーチンだった場合はTaskとしてスケジュールされる
 - タイムアウトの場合はTaskをキャンセルし、 `asyncio.TimeoutError <https://docs.python.org/ja/3/library/asyncio-exceptions.html#asyncio.TimeoutError>`_ を送出する
 
-.. literalinclude:: ./code/await_for.py
+.. literalinclude:: ./code/asyncio/await_for.py
    :linenos:
 
 ``asyncio.TimeoutError`` になる
@@ -41,10 +41,10 @@ asyncio.as_completed
 - 完了した順に、イテレータを返す
 - イテレーションが完了する前にタイムアウトした場合は ``asyncio.TimeoutError`` を送出する
 
-.. literalinclude:: ./code/as_completed.py
+.. literalinclude:: ./code/asyncio/as_completed.py
    :linenos:
 
-.. literalinclude:: ./code/as_completed.txt
+.. literalinclude:: ./code/asyncio/as_completed.txt
 
 asyncio.wait
 ------------
@@ -53,10 +53,10 @@ asyncio.wait
 - 完了したタスクと保留中のタスクのset（集合）を返す
 - ``return_when`` でいつ結果を返すかを指定する
 
-.. literalinclude:: ./code/wait.py
+.. literalinclude:: ./code/asyncio/wait.py
    :linenos:
 
-.. literalinclude:: ./code/wait.txt
+.. literalinclude:: ./code/asyncio/wait.txt
 
 return_when
 ^^^^^^^^^^^
@@ -71,10 +71,10 @@ FIRST_EXCEPTION
 ALL_COMPLETED
   - すべてのFutureが終了したかキャンセルされたときに返す（デフォルト）
 
-.. literalinclude:: ./code/wait_FIRST_COMPLETED.py
+.. literalinclude:: ./code/asyncio/wait_FIRST_COMPLETED.py
    :linenos:
 
-.. literalinclude:: ./code/wait_FIRST_COMPLETED.txt
+.. literalinclude:: ./code/asyncio/wait_FIRST_COMPLETED.txt
 
 練習問題
 --------

@@ -22,7 +22,7 @@ Taskオブジェクトが生成される
 単にコルーチンをawaitして実行
 -----------------------------
 
-.. literalinclude:: ./code/nontask.py
+.. literalinclude:: ./code/asyncio/nontask.py
    :linenos:
 
 実行結果: ``time: 7.0069193840026855``
@@ -30,7 +30,7 @@ Taskオブジェクトが生成される
 Taskを作成して実行
 ------------------
 
-.. literalinclude:: ./code/task.py
+.. literalinclude:: ./code/asyncio/task.py
    :linenos:
 
 実行結果: ``time: 5.004063844680786``
@@ -44,7 +44,7 @@ Taskを作成して実行
 asyncio.gatherにコルーチンを渡した例
 ------------------------------------
 
-.. literalinclude:: ./code/gather_coroutine.py
+.. literalinclude:: ./code/asyncio/gather_coroutine.py
    :linenos:
 
 実行結果: ``time: 5.007250785827637``
@@ -52,7 +52,7 @@ asyncio.gatherにコルーチンを渡した例
 asyncio.gatherにTaskを渡した例
 ------------------------------
 
-.. literalinclude:: ./code/gather_task.py
+.. literalinclude:: ./code/asyncio/gather_task.py
    :linenos:
 
 実行結果: ``time: 5.006976842880249``
@@ -62,5 +62,5 @@ asyncio.gatherにTaskを渡した例
 
 次のコードの ``get_status_code`` 関数を並行に実行する ``main`` 関数を作成してください
 
-.. literalinclude:: ./code/aiohttp_request.py
+.. literalinclude:: ./code/asyncio/aiohttp_request.py
    :linenos:

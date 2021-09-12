@@ -9,7 +9,7 @@
 
 `time.sleep <https://docs.python.org/ja/3/library/time.html#time.sleep>`_ はブロッキングするので、完了を待ってから次の処理に移る
 
-.. literalinclude:: ./code/blocking.py
+.. literalinclude:: ./code/asyncio/blocking.py
    :linenos:
 
 実行結果: ``time: 7.009732246398926``
@@ -22,7 +22,7 @@
 
 `asyncio.sleep <https://docs.python.org/ja/3/library/asyncio-task.html#sleeping>`_ はノンブロッキング処理なので、待っている間に次の処理に移れる
 
-.. literalinclude:: ./code/task.py
+.. literalinclude:: ./code/asyncio/task.py
    :linenos:
 
 実行結果: ``time: 5.004534006118774``
@@ -36,7 +36,7 @@
   - `ThreadPoolExecutor <https://docs.python.org/ja/3/library/concurrent.futures.html#concurrent.futures.ThreadPoolExecutor>`_
   - `ProcessPoolExecutor <https://docs.python.org/ja/3/library/concurrent.futures.html#processpoolexecutor>`_
 
-.. literalinclude:: ./code/nonblocking_function.py
+.. literalinclude:: ./code/asyncio/nonblocking_function.py
    :linenos:
 
 実行結果: ``time: 5.005532503128052``
@@ -46,5 +46,5 @@
 
 次のコードを非同期(ノンブロッキング)に実装してください
 
-.. literalinclude:: ./code/get_request.py
+.. literalinclude:: ./code/asyncio/get_request.py
    :linenos:
