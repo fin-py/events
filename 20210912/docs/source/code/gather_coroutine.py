@@ -2,12 +2,8 @@ import asyncio
 import time
 
 
-async def neru(n):
-    await asyncio.sleep(n)
-
-
 async def main():
-    await asyncio.gather(neru(2), neru(5))
+    await asyncio.gather(asyncio.sleep(2), asyncio.sleep(5))
 
 
 start = time.time()

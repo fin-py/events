@@ -2,13 +2,9 @@ import asyncio
 import time
 
 
-async def neru(n):
-    await asyncio.sleep(n)
-
-
 async def main():
-    task1 = asyncio.create_task(neru(2))
-    task2 = asyncio.create_task(neru(5))
+    task1 = asyncio.create_task(asyncio.sleep(2))
+    task2 = asyncio.create_task(asyncio.sleep(5))
     await task1
     await task2
 
