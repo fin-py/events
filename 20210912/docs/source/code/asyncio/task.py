@@ -3,10 +3,8 @@ import time
 
 
 async def main():
-    task1 = asyncio.create_task(asyncio.sleep(2))
-    task2 = asyncio.create_task(asyncio.sleep(5))
-    await task1
-    await task2
+    await asyncio.create_task(asyncio.sleep(2))
+    await asyncio.create_task(asyncio.sleep(5))
 
 
 start = time.time()
