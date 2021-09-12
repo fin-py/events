@@ -7,7 +7,8 @@ async def neru(n):
 
 
 async def main():
-    asyncio.gather(asyncio.create_task(neru(2)), asyncio.create_task(neru(5)))
+    await asyncio.create_task(neru(2))
+    await asyncio.create_task(neru(5))
 
 
 start = time.time()

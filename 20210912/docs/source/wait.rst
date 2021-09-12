@@ -6,10 +6,10 @@ Wait
 - 例外に応じて処理を制御できる
 
 タイムアウト
-  - `asyncio.wait_for <https://docs.python.org/ja/3/library/asyncio-task.html?highlight=asyncio%20wait_for#asyncio.wait_for>`_
+  - `asyncio.wait_for <https://docs.python.org/ja/3/library/asyncio-task.html#asyncio.wait_for>`_
 要素の終了待機
-  - `asyncio.as_completed <https://docs.python.org/ja/3/library/asyncio-task.html?highlight=asyncio%20wait_for#asyncio.as_completed>`_
-  - `asyncio.wait <https://docs.python.org/ja/3/library/asyncio-task.html?highlight=asyncio%20wait_for#asyncio.wait>`_
+  - `asyncio.as_completed <https://docs.python.org/ja/3/library/asyncio-task.html#asyncio.as_completed>`_
+  - `asyncio.wait <https://docs.python.org/ja/3/library/asyncio-task.html#asyncio.wait>`_
 
 Future
 ------

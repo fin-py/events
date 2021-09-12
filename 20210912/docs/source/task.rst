@@ -39,7 +39,7 @@ Taskを作成して実行
 --------------
 
 - awaitableオブジェクトを並行して実行
-- `asyncio.gather <https://docs.python.org/ja/3/library/asyncio-task.html?highlight=asyncio%20gather#asyncio.gather>`_ に渡されたシーケンスは並行実行される
+- `asyncio.gather <https://docs.python.org/ja/3/library/asyncio-task.html#asyncio.gather>`_ に渡されたシーケンスは並行実行される
 
 asyncio.gatherにコルーチンを渡した例
 ------------------------------------
