@@ -30,7 +30,7 @@ Taskオブジェクトが生成される
 Taskを作成して実行
 ------------------
 
-.. literalinclude:: ./code/asyncio/task.py
+.. literalinclude:: ./code/asyncio/gather_task.py
    :linenos:
 
 実行結果: ``time: 5.004063844680786``
@@ -48,14 +48,6 @@ asyncio.gatherにコルーチンを渡した例
    :linenos:
 
 実行結果: ``time: 5.007250785827637``
-
-asyncio.gatherにTaskを渡した例
-------------------------------
-
-.. literalinclude:: ./code/asyncio/gather_task.py
-   :linenos:
-
-実行結果: ``time: 5.006976842880249``
 
 練習問題
 --------
