@@ -1,0 +1,134 @@
+
+<!DOCTYPE html>
+
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <title>イベントループ</title>
+    <link rel="stylesheet" type="text/css" href="_static/revealjs4/dist/reveal.css" />
+    <link rel="stylesheet" href="_static/revealjs4/dist/theme/solarized.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/slides.css" />
+    <link rel="stylesheet" type="text/css" href="_static/revealjs4/plugin/highlight/zenburn.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/clipboard.min.js"></script>
+    <script src="_static/copybutton.js"></script>
+    <script src="_static/toggleprompt.js"></script>
+    <script src="_static/translations.js"></script>
+    <link rel="index" title="索引" href="genindex.html" />
+    <link rel="search" title="検索" href="search.html" />
+    <link rel="next" title="参考資料" href="reference.html" />
+    <link rel="prev" title="ブロッキング/ノンブロッキング" href="blocking_nonblocking.html" />
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+    
+
+  </head><body>
+    <div class="reveal">
+        <div class="slides">
+            <section >
+<h1>イベントループ</h1>
+<ul class="simple">
+<li><p>コルーチンを実行</p>
+<ul>
+<li><p>非同期関数( <code class="docutils literal notranslate"><span class="pre">async</span> <span class="pre">def</span></code> )は実行しても処理されない</p></li>
+<li><p>コルーチンの実態はジェネレータ</p></li>
+<li><p>イベントループはコルーチンをイテレーションする</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section >
+<h2>イベントループの取得</h2>
+<dl class="simple">
+<dt><a class="reference external" href="https://docs.python.org/ja/3/library/asyncio-eventloop.html#asyncio.get_running_loop">asyncio.get_running_loop</a></dt><dd><p>現在のスレッドのイベントループを取得</p>
+</dd>
+<dt><a class="reference external" href="https://docs.python.org/ja/3/library/asyncio-eventloop.html#asyncio.get_event_loop">asyncio.get_event_loop</a></dt><dd><ul class="simple">
+<li><p>現在のイベントループを取得</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">asyncio.set_event_loop</span></code> が呼ばれていない場合は新しいイベントループを作成</p></li>
+<li><p>取得したループはカレントループとなる</p></li>
+<li><p>より高レベルの <a class="reference external" href="https://docs.python.org/ja/3/library/asyncio-task.html#asyncio.run">asyncio.run</a> を検討できる</p></li>
+</ul>
+</dd>
+<dt><a class="reference external" href="https://docs.python.org/ja/3/library/asyncio-eventloop.html#asyncio.set_event_loop">asyncio.set_event_loop</a></dt><dd><p>現在のスレッドのイベントループとして設定</p>
+</dd>
+<dt><a class="reference external" href="https://docs.python.org/ja/3/library/asyncio-eventloop.html#asyncio.new_event_loop">asyncio.new_event_loop</a></dt><dd><ul class="simple">
+<li><p>新しいイベントループオブジェクトを作成</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">asyncio.set_event_loop</span></code> でカレントループとなる</p></li>
+</ul>
+</dd>
+</dl>
+</section>
+<section >
+<h2>イベントループの処理</h2>
+<dl class="simple">
+<dt><a class="reference external" href="https://docs.python.org/ja/3/library/asyncio-eventloop.html#asyncio.loop.run_until_complete">loop.run_until_complete</a></dt><dd><ul class="simple">
+<li><p>Futureが完了するまで実行する</p></li>
+<li><p>引数にコルーチンが渡された場合、 <code class="docutils literal notranslate"><span class="pre">asyncio.Task</span></code> として実行するようにスケジュールされる</p></li>
+</ul>
+</dd>
+<dt><a class="reference external" href="https://docs.python.org/ja/3/library/asyncio-eventloop.html#asyncio.loop.run_forever">loop.run_forever</a></dt><dd><p><code class="docutils literal notranslate"><span class="pre">stop</span></code> が呼び出されるまでイベントループを実行し続ける</p>
+</dd>
+<dt><a class="reference external" href="https://docs.python.org/ja/3/library/asyncio-eventloop.html#asyncio.loop.stop">loop.stop</a></dt><dd><p>イベントループを停止する</p>
+</dd>
+<dt><a class="reference external" href="https://docs.python.org/ja/3/library/asyncio-eventloop.html#asyncio.loop.is_running">loop.is_running</a></dt><dd><p>イベントループが実行中の場合は <code class="docutils literal notranslate"><span class="pre">True</span></code> を返す</p>
+</dd>
+<dt><a class="reference external" href="https://docs.python.org/ja/3/library/asyncio-eventloop.html#asyncio.loop.is_closed">loop.is_closed</a></dt><dd><p>イベントループがクローズされた場合は <code class="docutils literal notranslate"><span class="pre">True</span></code> を返す</p>
+</dd>
+<dt><a class="reference external" href="https://docs.python.org/ja/3/library/asyncio-eventloop.html#asyncio.loop.close">loop.close</a></dt><dd><ul class="simple">
+<li><p>イベントループをクローズする</p></li>
+<li><p>保留中のコールバックは破棄される</p></li>
+<li><p>executorは終了を待たずに停止される</p></li>
+</ul>
+</dd>
+</dl>
+</section>
+<section >
+<h2>イベントループのファイナライズ</h2>
+<dl class="simple">
+<dt><a class="reference external" href="https://docs.python.org/ja/3/library/asyncio-eventloop.html#asyncio.loop.shutdown_asyncgens">coroutine loop.shutdown_asyncgens</a></dt><dd><ul class="simple">
+<li><p>デフォルトのexecutorの <code class="docutils literal notranslate"><span class="pre">aclose</span></code> をスケジュールする</p></li>
+<li><p>すべての非同期ジェネレータをファイナライズする</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">asyncio.run</span></code> では自動で実行される</p></li>
+</ul>
+</dd>
+<dt><a class="reference external" href="https://docs.python.org/ja/3/library/asyncio-eventloop.html#asyncio.loop.shutdown_default_executor">coroutine loop.shutdown_default_executor</a></dt><dd><ul class="simple">
+<li><p>デフォルトのexecutorのクローズをスケジュールする</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ThreadPoolExecutor</span></code> に参加するのを待つ</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">asyncio.run</span></code> では自動で実行される</p></li>
+</ul>
+</dd>
+</dl>
+</section>
+
+        </div>
+    </div>
+    
+    <script src="_static/revealjs4/dist/reveal.js"></script>
+    
+    
+      <script src="_static/revealjs4/plugin/highlight/highlight.js"></script>
+      
+    
+    <script>
+        var revealjsConfig = new Object();
+        
+        
+        
+        
+          revealjsConfig.plugins = [
+            RevealHighlight,
+          ];
+        
+        // More info https://github.com/hakimel/reveal.js#configuration
+        Reveal.initialize(revealjsConfig);
+    </script>
+
+  </body>
+</html>

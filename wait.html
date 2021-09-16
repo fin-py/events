@@ -1,0 +1,243 @@
+
+<!DOCTYPE html>
+
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <title>Wait</title>
+    <link rel="stylesheet" type="text/css" href="_static/revealjs4/dist/reveal.css" />
+    <link rel="stylesheet" href="_static/revealjs4/dist/theme/solarized.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/slides.css" />
+    <link rel="stylesheet" type="text/css" href="_static/revealjs4/plugin/highlight/zenburn.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/clipboard.min.js"></script>
+    <script src="_static/copybutton.js"></script>
+    <script src="_static/toggleprompt.js"></script>
+    <script src="_static/translations.js"></script>
+    <link rel="index" title="索引" href="genindex.html" />
+    <link rel="search" title="検索" href="search.html" />
+    <link rel="next" title="ブロッキング/ノンブロッキング" href="blocking_nonblocking.html" />
+    <link rel="prev" title="Task" href="task.html" />
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+    
+
+  </head><body>
+    <div class="reveal">
+        <div class="slides">
+            <section >
+<h1>Wait</h1>
+<ul class="simple">
+<li><p>awaitableオブジェクト（Taskやコルーチン）はさまざまな条件で待機できる</p></li>
+<li><p>タイムアウトを設定できる</p></li>
+<li><p>例外に応じて処理を制御できる</p></li>
+</ul>
+<dl class="simple">
+<dt>タイムアウト</dt><dd><ul class="simple">
+<li><p><a class="reference external" href="https://docs.python.org/ja/3/library/asyncio-task.html#asyncio.wait_for">asyncio.wait_for</a></p></li>
+</ul>
+</dd>
+<dt>要素の終了待機</dt><dd><ul class="simple">
+<li><p><a class="reference external" href="https://docs.python.org/ja/3/library/asyncio-task.html#asyncio.as_completed">asyncio.as_completed</a></p></li>
+<li><p><a class="reference external" href="https://docs.python.org/ja/3/library/asyncio-task.html#asyncio.wait">asyncio.wait</a></p></li>
+</ul>
+</dd>
+</dl>
+</section>
+<section >
+<h2>Future</h2>
+<ul>
+<li><p>非同期処理の最終結果を表現する特別な低レベルのawaitableオブジェクト</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>pending</p></li>
+<li><p>finished</p></li>
+<li><p>cancelled</p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p>コルーチンはFutureの結果が返されるか例外が送出されるまでawaitされる</p></li>
+</ul>
+</section>
+<section >
+<h2>asyncio.wait_for</h2>
+<ul class="simple">
+<li><p>awaitableオブジェクトが完了するかタイムアウトになるのを待つ</p></li>
+<li><p>awaitableオブジェクトがコルーチンだった場合はTaskとしてスケジュールされる</p></li>
+<li><p>タイムアウトの場合はTaskをキャンセルし、 <a class="reference external" href="https://docs.python.org/ja/3/library/asyncio-exceptions.html#asyncio.TimeoutError">asyncio.TimeoutError</a> を送出する</p></li>
+</ul>
+<pre data-id="id1"><code data-trim data-noescape class="default" data-line-numbers>import asyncio
+import time
+
+
+async def main():
+    await asyncio.wait_for(asyncio.sleep(3), timeout=1)
+
+
+start = time.time()
+asyncio.run(main())
+print(f&quot;time: {time.time() - start}&quot;)
+</code></pre>
+<p><code class="docutils literal notranslate"><span class="pre">asyncio.TimeoutError</span></code> になる</p>
+</section>
+<section >
+<h2>asyncio.as_completed</h2>
+<ul class="simple">
+<li><p>awaitableオブジェクトを同時に実行する</p></li>
+<li><p>完了した順に、イテレータを返す</p></li>
+<li><p>イテレーションが完了する前にタイムアウトした場合は <code class="docutils literal notranslate"><span class="pre">asyncio.TimeoutError</span></code> を送出する</p></li>
+</ul>
+<pre data-id="id2"><code data-trim data-noescape class="default" data-line-numbers>import asyncio
+import time
+
+
+async def neru(n):
+    await asyncio.sleep(n)
+    return n
+
+
+async def main():
+    for f in asyncio.as_completed([neru(2), neru(4), neru(1)], timeout=3):
+        result = await f
+        print(f&quot;{result=}&quot;)
+
+
+start = time.time()
+asyncio.run(main())
+print(f&quot;time: {time.time() - start}&quot;)
+</code></pre>
+<pre data-id="id2"><code data-trim data-noescape class="default">result=1
+result=2
+Traceback (most recent call last):
+  File &quot;/home/driller/repo/events/20210912/docs/source/code/as_completed.py&quot;, line 17, in &lt;module&gt;
+    asyncio.run(main())
+  File &quot;/usr/local/lib/python3.9/asyncio/runners.py&quot;, line 44, in run
+    return loop.run_until_complete(main)
+  File &quot;/usr/local/lib/python3.9/asyncio/base_events.py&quot;, line 642, in run_until_complete
+    return future.result()
+  File &quot;/home/driller/repo/events/20210912/docs/source/code/as_completed.py&quot;, line 12, in main
+    result = await f
+  File &quot;/usr/local/lib/python3.9/asyncio/tasks.py&quot;, line 613, in _wait_for_one
+    raise exceptions.TimeoutError
+asyncio.exceptions.TimeoutError</code></pre>
+</section>
+<section>
+<section >
+<h2>asyncio.wait</h2>
+<ul class="simple">
+<li><p>awaitableオブジェクトを同時に実行する</p></li>
+<li><p>完了したタスクと保留中のタスクのset（集合）を返す</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">return_when</span></code> でいつ結果を返すかを指定する</p></li>
+</ul>
+<pre data-id="id3"><code data-trim data-noescape class="default" data-line-numbers>import asyncio
+import time
+
+
+async def main():
+    tasks = [
+        asyncio.create_task(asyncio.sleep(1)),
+        asyncio.create_task(asyncio.sleep(3)),
+    ]
+    done, pending = await asyncio.wait(tasks, timeout=2)
+    
+    for t in tasks:
+        print(f&quot;{t} in done: {t in done}&quot;)
+        print(f&quot;{t} in pending: {t in pending}&quot;)
+
+
+start = time.time()
+asyncio.run(main())
+print(f&quot;time: {time.time() - start}&quot;)
+</code></pre>
+<pre data-id="id3"><code data-trim data-noescape class="default">&lt;Task finished name='Task-2' coro=&lt;sleep() done, defined at /usr/local/lib/python3.9/asyncio/tasks.py:636&gt; result=None&gt; in done: True
+&lt;Task finished name='Task-2' coro=&lt;sleep() done, defined at /usr/local/lib/python3.9/asyncio/tasks.py:636&gt; result=None&gt; in pending: False
+&lt;Task pending name='Task-3' coro=&lt;sleep() running at /usr/local/lib/python3.9/asyncio/tasks.py:654&gt; wait_for=&lt;Future pending cb=[&lt;TaskWakeupMethWrapper object at 0x7f0123edb2b0&gt;()]&gt;&gt; in done: False
+&lt;Task pending name='Task-3' coro=&lt;sleep() running at /usr/local/lib/python3.9/asyncio/tasks.py:654&gt; wait_for=&lt;Future pending cb=[&lt;TaskWakeupMethWrapper object at 0x7f0123edb2b0&gt;()]&gt;&gt; in pending: True
+time: 2.0029919147491455</code></pre>
+</section>
+<section >
+<h3>return_when</h3>
+<p>asyncio.waitがいつ返すかを指定</p>
+<dl class="simple">
+<dt>FIRST_COMPLETED</dt><dd><ul class="simple">
+<li><p>いずれかのFutureが終了したかキャンセルされたときに返す</p></li>
+</ul>
+</dd>
+<dt>FIRST_EXCEPTION</dt><dd><ul class="simple">
+<li><p>いずれかのFutureが例外の送出で終了した場合に返す</p></li>
+<li><p>例外を送出したFutureがない場合は、 <code class="docutils literal notranslate"><span class="pre">ALL_COMPLETED</span></code> と等価になる</p></li>
+</ul>
+</dd>
+<dt>ALL_COMPLETED</dt><dd><ul class="simple">
+<li><p>すべてのFutureが終了したかキャンセルされたときに返す（デフォルト）</p></li>
+</ul>
+</dd>
+</dl>
+<pre data-id="return-when"><code data-trim data-noescape class="default" data-line-numbers>import asyncio
+import time
+from asyncio.tasks import FIRST_COMPLETED
+
+
+async def main():
+    tasks = [
+        asyncio.create_task(asyncio.sleep(1)),
+        asyncio.create_task(asyncio.sleep(3)),
+    ]
+    done, pending = await asyncio.wait(tasks, timeout=2, return_when=FIRST_COMPLETED)
+
+    for t in tasks:
+        print(f&quot;{t} in done: {t in done}&quot;)
+        print(f&quot;{t} in pending: {t in pending}&quot;)
+
+
+start = time.time()
+asyncio.run(main())
+print(f&quot;time: {time.time() - start}&quot;)
+</code></pre>
+<pre data-id="return-when"><code data-trim data-noescape class="default">&lt;Task finished name='Task-2' coro=&lt;sleep() done, defined at /usr/local/lib/python3.9/asyncio/tasks.py:636&gt; result=None&gt; in done: True
+&lt;Task finished name='Task-2' coro=&lt;sleep() done, defined at /usr/local/lib/python3.9/asyncio/tasks.py:636&gt; result=None&gt; in pending: False
+&lt;Task pending name='Task-3' coro=&lt;sleep() running at /usr/local/lib/python3.9/asyncio/tasks.py:654&gt; wait_for=&lt;Future pending cb=[&lt;TaskWakeupMethWrapper object at 0x7fe15a347400&gt;()]&gt;&gt; in done: False
+&lt;Task pending name='Task-3' coro=&lt;sleep() running at /usr/local/lib/python3.9/asyncio/tasks.py:654&gt; wait_for=&lt;Future pending cb=[&lt;TaskWakeupMethWrapper object at 0x7fe15a347400&gt;()]&gt;&gt; in pending: True
+time: 1.0022432804107666</code></pre>
+</section>
+</section>
+<section >
+<h2>練習問題</h2>
+<ol class="arabic simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">asyncio.as_completed</span></code> に複数のコルーチンを渡し、うち1つのコルーチンは例外を送出してください</p></li>
+<li><p>1.の例外をtry-except処理してください</p></li>
+</ol>
+</section>
+
+        </div>
+    </div>
+    
+    <script src="_static/revealjs4/dist/reveal.js"></script>
+    
+    
+      <script src="_static/revealjs4/plugin/highlight/highlight.js"></script>
+      
+    
+    <script>
+        var revealjsConfig = new Object();
+        
+        
+        
+        
+          revealjsConfig.plugins = [
+            RevealHighlight,
+          ];
+        
+        // More info https://github.com/hakimel/reveal.js#configuration
+        Reveal.initialize(revealjsConfig);
+    </script>
+
+  </body>
+</html>

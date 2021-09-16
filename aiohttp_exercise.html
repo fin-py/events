@@ -1,0 +1,121 @@
+
+<!DOCTYPE html>
+
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <title>AIOHTTP-Client Exercise</title>
+    <link rel="stylesheet" type="text/css" href="_static/revealjs4/dist/reveal.css" />
+    <link rel="stylesheet" href="_static/revealjs4/dist/theme/solarized.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/slides.css" />
+    <link rel="stylesheet" type="text/css" href="_static/revealjs4/plugin/highlight/zenburn.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/clipboard.min.js"></script>
+    <script src="_static/copybutton.js"></script>
+    <script src="_static/toggleprompt.js"></script>
+    <script src="_static/translations.js"></script>
+    <link rel="index" title="索引" href="genindex.html" />
+    <link rel="search" title="検索" href="search.html" />
+    <link rel="prev" title="AIOHTTP-Client Quickstart" href="aiohttp_client.html" />
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+    
+
+  </head><body>
+    <div class="reveal">
+        <div class="slides">
+            <section >
+<h1>AIOHTTP-Client Exercise</h1>
+</section>
+<section >
+<h2>目的</h2>
+<ul class="simple">
+<li><p>Clientを使った簡単な練習問題に取組む</p></li>
+<li><p>インターネット経由で取得できるデータを、並行に取得して処理する簡単なPythonを書けるようになる</p></li>
+</ul>
+</section>
+<section >
+<h2>課題1</h2>
+<ul class="simple">
+<li><p>暗号資産取引所 ftx の APIを利用して、取引データをウェブソケット経由で取得する</p></li>
+<li><p>参考: <a class="reference external" href="https://github.com/MtkN1/pybotters/blob/main/pybotters/ws.py">pybotters/ws.py at main · MtkN1/pybotters</a></p></li>
+</ul>
+<pre data-id="id2"><code data-trim data-noescape class="default" data-line-numbers>import asyncio
+import aiohttp
+
+import logging
+
+logging.basicConfig(level=logging.INFO, format=&quot;%(asctime)s %(message)s&quot;, datefmt=&quot;%X&quot;)
+
+
+async def main():
+    async with aiohttp.ClientSession() as session:
+        async with session.ws_connect(&quot;wss://ftx.com/ws&quot;) as ws:
+            # サブスクライブ
+            await ws.send_str(
+                '{&quot;op&quot;: &quot;subscribe&quot;, &quot;channel&quot;: &quot;trades&quot;, &quot;market&quot;: &quot;BTC-PERP&quot;}'
+            )
+            async for msg in ws:
+                if msg.type == aiohttp.WSMsgType.TEXT:
+                    logging.info(msg.data)
+                else:
+                    break
+
+
+asyncio.run(main())
+</code></pre>
+<ol class="arabic simple">
+<li><p>サブスクライブ時に文字列を渡していますが、json を渡すように書き換えてください。</p></li>
+<li><p><a class="reference internal" href="aiohttp_client.html#websockets"><span class="std std-ref">websockets</span></a> を参考にして async for ではなく <code class="docutils literal notranslate"><span class="pre">ws.recieve()</span></code> して、非同期イテレータを使わないどうなるのか実験してください。</p></li>
+<li><p>以下は、暗号資産APIに関する課題なので興味がある方はやってみて下さい。</p>
+<ol class="loweralpha simple">
+<li><p>&quot;BTC-PERP&quot; 以外のマーケットをサブスクライブしてデータを取得して下さい。マーケットリストは <a class="reference external" href="https://ftx.com/en/markets">FTX Markets</a> を参照してください。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">orderbook</span></code> チャンネルをサブスクライブしてください。参照： <a class="reference external" href="https://docs.ftx.com/#websocket-api">Websocket API</a></p></li>
+<li><p>Bybit の API を使って 適当なリアルタイムデータを取得して下さい。参照： <a class="reference external" href="https://bybit-exchange.github.io/docs/inverse/?python#t-websocket">WebSocket Data – Bybit API Docs</a></p></li>
+</ol>
+</li>
+</ol>
+</section>
+<section >
+<h2>課題2</h2>
+<ul class="simple">
+<li><p>今日のハンズオン内容をベースにした問題</p></li>
+</ul>
+<ol class="arabic simple" start="4">
+<li><p><a class="reference internal" href="aiohttp_client.html#binary"><span class="std std-ref">バイナリデータの読み込み</span></a> のポケモン画像取得を非同期で150匹取得してローカルに保存して下さい</p></li>
+<li><p><a class="reference external" href="https://connpass.com/about/api/">https://connpass.com/about/api/</a> を使って、キーワードが &quot;aiohttp&quot; のイベントを探し、event_id のみリストで取得して下さい。ただし、connpass api は <code class="docutils literal notranslate"><span class="pre">.json()</span></code> で取得出来ないので、 <code class="docutils literal notranslate"><span class="pre">.text()</span></code> で取得して下さい。</p></li>
+</ol>
+</section>
+
+        </div>
+    </div>
+    
+    <script src="_static/revealjs4/dist/reveal.js"></script>
+    
+    
+      <script src="_static/revealjs4/plugin/highlight/highlight.js"></script>
+      
+    
+    <script>
+        var revealjsConfig = new Object();
+        
+        
+        
+        
+          revealjsConfig.plugins = [
+            RevealHighlight,
+          ];
+        
+        // More info https://github.com/hakimel/reveal.js#configuration
+        Reveal.initialize(revealjsConfig);
+    </script>
+
+  </body>
+</html>

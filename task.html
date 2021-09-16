@@ -1,0 +1,157 @@
+
+<!DOCTYPE html>
+
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <title>Task</title>
+    <link rel="stylesheet" type="text/css" href="_static/revealjs4/dist/reveal.css" />
+    <link rel="stylesheet" href="_static/revealjs4/dist/theme/solarized.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/slides.css" />
+    <link rel="stylesheet" type="text/css" href="_static/revealjs4/plugin/highlight/zenburn.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/clipboard.min.js"></script>
+    <script src="_static/copybutton.js"></script>
+    <script src="_static/toggleprompt.js"></script>
+    <script src="_static/translations.js"></script>
+    <link rel="index" title="索引" href="genindex.html" />
+    <link rel="search" title="検索" href="search.html" />
+    <link rel="next" title="Wait" href="wait.html" />
+    <link rel="prev" title="コルーチン" href="coroutine.html" />
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+    
+
+  </head><body>
+    <div class="reveal">
+        <div class="slides">
+            <section >
+<h1>Task</h1>
+<p><a class="reference external" href="https://docs.python.org/ja/3/library/asyncio-task.html#asyncio.create_task">asyncio.create_task</a> 関数によるTaskの作成</p>
+<pre data-id="task"><code data-trim data-noescape class="python">&gt;&gt;&gt; import asyncio
+&gt;&gt;&gt;
+&gt;&gt;&gt; async def func():
+...     pass
+...
+&gt;&gt;&gt; async def main():
+...     task = asyncio.create_task(func())
+...     print(type(task))
+...
+&gt;&gt;&gt; asyncio.run(main())
+&lt;class '_asyncio.Task'&gt;</code></pre>
+<p>Taskオブジェクトが生成される</p>
+</section>
+<section >
+<h2>単にコルーチンをawaitして実行</h2>
+<pre data-id="await"><code data-trim data-noescape class="default" data-line-numbers>import asyncio
+import time
+
+
+async def main():
+    await asyncio.sleep(2)
+    await asyncio.sleep(5)
+
+
+start = time.time()
+asyncio.run(main())
+print(f&quot;time: {time.time() - start}&quot;)
+</code></pre>
+<p>実行結果: <code class="docutils literal notranslate"><span class="pre">time:</span> <span class="pre">7.0069193840026855</span></code></p>
+</section>
+<section >
+<h2>Taskを作成して実行</h2>
+<pre data-id="id1"><code data-trim data-noescape class="default" data-line-numbers>import asyncio
+import time
+
+
+async def main():
+    task1 = asyncio.create_task(asyncio.sleep(2))
+    task2 = asyncio.create_task(asyncio.sleep(5))
+    await asyncio.gather(task1, task2)
+
+
+start = time.time()
+asyncio.run(main())
+print(f&quot;time: {time.time() - start}&quot;)
+</code></pre>
+<p>実行結果: <code class="docutils literal notranslate"><span class="pre">time:</span> <span class="pre">5.004063844680786</span></code></p>
+</section>
+<section >
+<h2>並行なTask実行</h2>
+<ul class="simple">
+<li><p>awaitableオブジェクトを並行して実行</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/ja/3/library/asyncio-task.html#asyncio.gather">asyncio.gather</a> に渡されたシーケンスは並行実行される</p></li>
+</ul>
+</section>
+<section >
+<h2>asyncio.gatherにコルーチンを渡した例</h2>
+<pre data-id="id3"><code data-trim data-noescape class="default" data-line-numbers>import asyncio
+import time
+
+
+async def main():
+    await asyncio.gather(asyncio.sleep(2), asyncio.sleep(5))
+
+
+start = time.time()
+asyncio.run(main())
+print(f&quot;time: {time.time() - start}&quot;)
+</code></pre>
+<p>実行結果: <code class="docutils literal notranslate"><span class="pre">time:</span> <span class="pre">5.007250785827637</span></code></p>
+</section>
+<section >
+<h2>練習問題</h2>
+<p>次のコードの <code class="docutils literal notranslate"><span class="pre">get_status_code</span></code> 関数を並行に実行する <code class="docutils literal notranslate"><span class="pre">main</span></code> 関数を作成してください</p>
+<pre data-id="id4"><code data-trim data-noescape class="default" data-line-numbers>import asyncio
+import time
+
+import aiohttp
+
+
+async def get_status_code(n):
+    url = f&quot;https://httpbin.org/delay/{n}&quot;
+
+    async with aiohttp.ClientSession() as session:
+        async with session.get(url) as response:
+
+            print(&quot;Status:&quot;, response.status)
+
+
+start = time.time()
+asyncio.run(get_status_code(3))
+print(f&quot;time: {time.time() - start}&quot;)
+</code></pre>
+</section>
+
+        </div>
+    </div>
+    
+    <script src="_static/revealjs4/dist/reveal.js"></script>
+    
+    
+      <script src="_static/revealjs4/plugin/highlight/highlight.js"></script>
+      
+    
+    <script>
+        var revealjsConfig = new Object();
+        
+        
+        
+        
+          revealjsConfig.plugins = [
+            RevealHighlight,
+          ];
+        
+        // More info https://github.com/hakimel/reveal.js#configuration
+        Reveal.initialize(revealjsConfig);
+    </script>
+
+  </body>
+</html>

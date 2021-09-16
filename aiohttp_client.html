@@ -1,0 +1,311 @@
+
+<!DOCTYPE html>
+
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <title>AIOHTTP-Client Quickstart</title>
+    <link rel="stylesheet" type="text/css" href="_static/revealjs4/dist/reveal.css" />
+    <link rel="stylesheet" href="_static/revealjs4/dist/theme/solarized.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/slides.css" />
+    <link rel="stylesheet" type="text/css" href="_static/revealjs4/plugin/highlight/zenburn.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/clipboard.min.js"></script>
+    <script src="_static/copybutton.js"></script>
+    <script src="_static/toggleprompt.js"></script>
+    <script src="_static/translations.js"></script>
+    <link rel="index" title="索引" href="genindex.html" />
+    <link rel="search" title="検索" href="search.html" />
+    <link rel="next" title="AIOHTTP-Client Exercise" href="aiohttp_exercise.html" />
+    <link rel="prev" title="AIOHTTP Client デモ" href="aiohttp_client_demo.html" />
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+    
+
+  </head><body>
+    <div class="reveal">
+        <div class="slides">
+            <section >
+<h1>AIOHTTP-Client Quickstart</h1>
+<ul class="simple">
+<li><p>Doc: <a class="reference external" href="https://docs.aiohttp.org/en/stable/client.html">Client — aiohttp 3.7.4.post0 documentation</a></p></li>
+</ul>
+</section>
+<section>
+<section >
+<h2>async with</h2>
+<pre data-id="async-with"><code data-trim data-noescape class="default" data-line-numbers>import asyncio
+import aiohttp
+
+
+async def main():
+    async with aiohttp.ClientSession() as session:
+        async with session.get(&quot;http://httpbin.org/get&quot;) as resp:
+            print(resp.status)
+            print(await resp.json())
+
+asyncio.run(main())</code></pre>
+<ul class="simple">
+<li><p>非同期のコンテキストマネージャ</p></li>
+<li><p>ClientSessionを使った処理が終わったら session を close してくれる。</p></li>
+<li><p>もし session context manager を使わない場合は以下のように <code class="docutils literal notranslate"><span class="pre">.close()</span></code> メソッドを呼び出し必ずクローズする。</p></li>
+</ul>
+<pre data-id="async-with"><code data-trim data-noescape class="default" data-line-numbers>import asyncio
+import aiohttp
+
+
+async def main():
+    session = aiohttp.ClientSession()
+    resp = await session.get(&quot;http://httpbin.org/get&quot;)
+    print(await resp.json())
+    await session.close()
+
+asyncio.run(main())</code></pre>
+</section>
+<section >
+<h3>with文のネスト</h3>
+<ul class="simple">
+<li><p><a class="reference external" href="https://www.python.jp/news/wnpython310/with-statement.html">Python 3.10の新機能(その2） with文のネスト: Python3.10の新機能</a></p></li>
+<li><p>これを async with でもやってみたところ出来ました。</p></li>
+<li><p>(実はpython3.9でも可)</p></li>
+</ul>
+<pre data-id="with"><code data-trim data-noescape class="python">async with (aiohttp.ClientSession() as session,
+            session.get(&quot;http://httpbin.org/get&quot;) as resp):
+            :
+            :</code></pre>
+</section>
+</section>
+<section >
+<h2>async for</h2>
+<ul class="simple">
+<li><p>非同期イテレータ/ジェネレータ用の <code class="docutils literal notranslate"><span class="pre">for</span></code> 文</p></li>
+<li><p>下記２つは同じ意味</p></li>
+</ul>
+<pre data-id="async-for"><code data-trim data-noescape class="python">async for a in async_iterable:
+   await do_a_thing(a)</code></pre>
+<pre data-id="async-for"><code data-trim data-noescape class="python">it = async_iterable.__aiter__()
+while True:
+   try:
+      a = await it.__anext__()
+   except StopAsyncIteration:
+      break
+
+   await do_a_thing(a)</code></pre>
+<ul class="simple">
+<li><p>参照： <a class="reference external" href="https://bbc.github.io/cloudfit-public-docs/asyncio/asyncio-part-3">Python Asyncio Part 3 – Asynchronous Context Managers and Asynchronous Iterators</a></p></li>
+</ul>
+</section>
+<section>
+<section >
+<h2>ClientSession</h2>
+<ul class="simple">
+<li><p><a class="reference external" href="https://docs.aiohttp.org/en/stable/client_reference.html#aiohttp.ClientSession">aiohttp.ClientSession</a></p></li>
+<li><p>クライアントセッションクラス。</p></li>
+<li><p>インスタンス化して(以下 <code class="docutils literal notranslate"><span class="pre">session</span></code> で表現)、そのオブジェクトメソッドを使ってリクエストを行う</p></li>
+</ul>
+</section>
+<section >
+<h3>session.request()</h3>
+<ul class="simple">
+<li><p><a class="reference external" href="https://docs.aiohttp.org/en/stable/client_reference.html?highlight=async%20with#aiohttp.ClientSession.request">aiohttp.ClientSession.request</a></p></li>
+<li><p>非同期のHTTPリクエストを実行</p></li>
+<li><dl class="simple">
+<dt>引数(必須)</dt><dd><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">method</span> <span class="pre">(str)</span></code> – HTTP method</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">url</span></code> – URL。文字列もしくは yarl URL オブジェクト</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><p>オプション引数：ドキュメント参照</p></li>
+<li><p>返り値は <a class="reference external" href="https://docs.aiohttp.org/en/stable/client_reference.html?highlight=async%20with#aiohttp.ClientResponse">aiohttp.ClientResponse</a> インスタンスオブジェクト</p></li>
+</ul>
+</section>
+<section>
+<section >
+<h3>session.get()</h3>
+<ul class="simple">
+<li><p><a class="reference external" href="https://docs.aiohttp.org/en/stable/client_reference.html?highlight=async%20with#aiohttp.ClientSession.get">aiohttp.ClientSession.get</a></p></li>
+<li><p>GET リクエスト</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">session.request()</span></code> の第一引数が <cite>GET</cite> に固定されているメソッド</p></li>
+<li><dl class="simple">
+<dt>引数(必須)</dt><dd><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">url</span></code> – URL。文字列もしくは yarl URL オブジェクト</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><p>オプション引数：ドキュメント参照</p></li>
+<li><p>返り値は <a class="reference external" href="https://docs.aiohttp.org/en/stable/client_reference.html?highlight=async%20with#aiohttp.ClientResponse">aiohttp.ClientResponse</a> インスタンスオブジェクト</p></li>
+</ul>
+</section>
+<section >
+<h4>URLリクエストにパラメータ を渡す</h4>
+<pre data-id="url"><code data-trim data-noescape class="default" data-line-numbers>import asyncio
+import aiohttp
+
+
+async def main():
+    async with aiohttp.ClientSession() as session:
+        params = {&quot;limit&quot;: &quot;10&quot;, &quot;offset&quot;: &quot;20&quot;}
+        async with session.get(
+            &quot;https://pokeapi.co/api/v2/pokemon&quot;, params=params
+        ) as resp:
+            print(resp.status)
+            print(await resp.json())
+
+
+asyncio.run(main())
+
+</code></pre>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">params</span></code> オプションで渡す</p></li>
+<li><p>同じキーに対して2つ以上の値を渡したい場合は、<a class="reference external" href="https://multidict.readthedocs.io/en/stable/multidict.html#multidict.MultiDict">MultiDict</a> もしくは、タプルのリストで渡す</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">MultiDict({'a':</span> <span class="pre">[1,</span> <span class="pre">3]})</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">MultiDict([('a',</span> <span class="pre">1),</span> <span class="pre">('a',</span> <span class="pre">3)])</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">([('a',</span> <span class="pre">1),</span> <span class="pre">('a',</span> <span class="pre">3)])</span></code></p></li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+</section>
+</section>
+<section >
+<h3>その他HTTPメソッド</h3>
+<ul class="simple">
+<li><p><a class="reference external" href="https://docs.aiohttp.org/en/stable/client_reference.html?highlight=async%20with#aiohttp.ClientSession.post">.post()</a> <a class="reference external" href="https://docs.aiohttp.org/en/stable/client_reference.html?highlight=async%20with#aiohttp.ClientSession.put">.put()</a> <a class="reference external" href="https://docs.aiohttp.org/en/stable/client_reference.html?highlight=async%20with#aiohttp.ClientSession.delete">.delete()</a> <a class="reference external" href="https://docs.aiohttp.org/en/stable/client_reference.html?highlight=async%20with#aiohttp.ClientSession.patch">.patch()</a> 等用意されている。</p></li>
+<li><p>返り値は <a class="reference external" href="https://docs.aiohttp.org/en/stable/client_reference.html?highlight=async%20with#aiohttp.ClientResponse">aiohttp.ClientResponse</a> インスタンスオブジェクト</p></li>
+</ul>
+</section>
+</section>
+<section>
+<section >
+<h2>ClientResponse</h2>
+<ul class="simple">
+<li><p><a class="reference external" href="https://docs.aiohttp.org/en/stable/client_reference.html?highlight=async%20with#aiohttp.ClientResponse">aiohttp.ClientResponse</a></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">session.request()</span></code> とそのファミリーが返すクラス</p></li>
+<li><p>API call だけがインスタンス化する(以下 <code class="docutils literal notranslate"><span class="pre">resp</span></code> と表現する)</p></li>
+<li><p>ユーザがこのクラスをインスタンス化することは一切ない</p></li>
+<li><p>コンテキストマネージャ <code class="docutils literal notranslate"><span class="pre">async</span> <span class="pre">with</span></code> での処理が完了すると release される</p></li>
+<li><dl class="simple">
+<dt>主なインスタンスメソッド</dt><dd><ul>
+<li><p><a class="reference external" href="https://docs.aiohttp.org/en/stable/client_reference.html?highlight=async%20with#aiohttp.ClientResponse.read">resp.read()</a> : レスポンス body を byte で読み込む。</p></li>
+<li><p><a class="reference external" href="https://docs.aiohttp.org/en/stable/client_reference.html?highlight=async%20with#aiohttp.ClientResponse.text">resp.text(encoding=None)</a>: レスポンス body を文字列で読み込む。エンコーディング指定可</p></li>
+<li><p><a class="reference external" href="https://docs.aiohttp.org/en/stable/client_reference.html?highlight=async%20with#aiohttp.ClientResponse.json">resp.json(encoding=None)</a> : レスポンス body を JSON で読み込み、辞書型オブジェクトで返す。エンコーディング指定可</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</section>
+<section >
+<h3>バイナリデータの読み込み</h3>
+<ul class="simple">
+<li><p>バイナリデータは <a class="reference external" href="https://docs.aiohttp.org/en/stable/client_reference.html?highlight=async%20with#aiohttp.ClientResponse.read">.read()</a>  で取得可</p></li>
+</ul>
+<pre data-id="binary"><code data-trim data-noescape class="default" data-line-numbers>import asyncio
+import aiohttp
+
+
+async def main():
+    async with aiohttp.ClientSession() as session:
+        async with session.get(&quot;https://pokeapi.co/api/v2/pokemon/25&quot;) as resp:
+            html = await resp.json()
+            async with session.get(html[&quot;sprites&quot;][&quot;front_default&quot;]) as png:
+                with open(&quot;/tmp/pikachu.png&quot;, &quot;wb&quot;) as f:
+                    f.write(await png.read())
+
+
+asyncio.run(main())
+</code></pre>
+</section>
+<section >
+<h3>streaming response</h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">read()</span></code> <code class="docutils literal notranslate"><span class="pre">json()</span></code> <code class="docutils literal notranslate"><span class="pre">text()</span></code> は メモリにロードするので、巨大なサイズのファイルの読み込みには <a class="reference external" href="https://docs.aiohttp.org/en/stable/streams.html#aiohttp.StreamReader">aiohttp.StreamReader</a>  のインスタンスの <code class="docutils literal notranslate"><span class="pre">.content</span></code> アトリビュートの利用を検討したほうがよい</p></li>
+<li><p>よく使われる方法としては、chunk size を指定してファイル等に書き込むなどする</p></li>
+</ul>
+<pre data-id="streaming-response"><code data-trim data-noescape class="default" data-line-numbers>import asyncio
+import aiohttp
+
+
+async def main():
+    async with aiohttp.ClientSession() as session:
+        async with session.get(&quot;https://api.github.com/events&quot;) as resp:
+            with open(&quot;/tmp/bigfile.txt&quot;, &quot;wb&quot;) as f:
+                while True:
+                    chunk = await resp.content.read(100)  # 100b, -1 ですべて
+                    # print(len(chunk))
+                    if not chunk:
+                        print(&quot;No chunk&quot;)
+                        break
+                    f.write(chunk)
+
+
+asyncio.run(main())
+</code></pre>
+</section>
+<section >
+<h3>websockets</h3>
+<pre data-id="websockets"><code data-trim data-noescape class="default" data-line-numbers>import asyncio
+import aiohttp
+
+import logging
+
+logging.basicConfig(level=logging.INFO, format=&quot;%(asctime)s %(message)s&quot;, datefmt=&quot;%X&quot;)
+
+
+async def main():
+    async with aiohttp.ClientSession() as session:
+        async with session.ws_connect(&quot;wss://ftx.com/ws&quot;) as ws:
+            await ws.send_str('{&quot;op&quot;:&quot;ping&quot;}')
+            # await ws.send_json({&quot;op&quot;:&quot;ping&quot;})
+            msg = await ws.receive()
+            if msg.type == aiohttp.WSMsgType.TEXT:
+                logging.info(msg.json())
+
+asyncio.run(main())</code></pre>
+<ul class="simple">
+<li><p>client session を確立後、<a class="reference external" href="https://docs.aiohttp.org/en/stable/client_reference.html#aiohttp.ClientSession.ws_connect">aiohttp.ClientSession.ws_connect()</a> メソッドでウェブソケットへ接続</p></li>
+<li><p>URL を渡して初期化すると、ウェブソケットサーバーに接続状態になる。返り値は <a class="reference external" href="https://docs.aiohttp.org/en/stable/client_reference.html#aiohttp.ClientWebSocketResponse">aiohttp.ClientWebSocketResponse</a> 。(以下 <code class="docutils literal notranslate"><span class="pre">ws</span></code> で表現)</p></li>
+<li><p><a class="reference external" href="https://docs.aiohttp.org/en/stable/client_reference.html#aiohttp.ClientWebSocketResponse.send_str">ws.send_str()</a> メソッドで ping を投げて <a class="reference external" href="https://docs.aiohttp.org/en/stable/client_reference.html#aiohttp.ClientWebSocketResponse.receive">ws.receive()</a> メソッドでレスポンスを待つ。</p></li>
+<li><p><a class="reference external" href="https://docs.aiohttp.org/en/stable/client_reference.html#aiohttp.ClientWebSocketResponse.send_json">ws.send_json()</a> メソッドで json を投げることも可</p></li>
+<li><p><a class="reference external" href="https://docs.aiohttp.org/en/stable/client_reference.html#aiohttp.ClientWebSocketResponse.receive">ws.receive()</a> の返り値は <a class="reference external" href="https://docs.aiohttp.org/en/stable/websocket_utilities.html#aiohttp.WSMessage">aiohttp.WSMessage</a> オブジェクト。その <code class="docutils literal notranslate"><span class="pre">type</span></code> 属性が <a class="reference external" href="https://docs.aiohttp.org/en/stable/websocket_utilities.html#aiohttp.WSMsgType">aiohttp.WSMsgType</a> で、そのタイプによって処理を切り分ける</p></li>
+</ul>
+</section>
+</section>
+
+        </div>
+    </div>
+    
+    <script src="_static/revealjs4/dist/reveal.js"></script>
+    
+    
+      <script src="_static/revealjs4/plugin/highlight/highlight.js"></script>
+      
+    
+    <script>
+        var revealjsConfig = new Object();
+        
+        
+        
+        
+          revealjsConfig.plugins = [
+            RevealHighlight,
+          ];
+        
+        // More info https://github.com/hakimel/reveal.js#configuration
+        Reveal.initialize(revealjsConfig);
+    </script>
+
+  </body>
+</html>

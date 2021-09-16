@@ -1,0 +1,107 @@
+
+<!DOCTYPE html>
+
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <title>コルーチン</title>
+    <link rel="stylesheet" type="text/css" href="_static/revealjs4/dist/reveal.css" />
+    <link rel="stylesheet" href="_static/revealjs4/dist/theme/solarized.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/slides.css" />
+    <link rel="stylesheet" type="text/css" href="_static/revealjs4/plugin/highlight/zenburn.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/clipboard.min.js"></script>
+    <script src="_static/copybutton.js"></script>
+    <script src="_static/toggleprompt.js"></script>
+    <script src="_static/translations.js"></script>
+    <link rel="index" title="索引" href="genindex.html" />
+    <link rel="search" title="検索" href="search.html" />
+    <link rel="next" title="Task" href="task.html" />
+    <link rel="prev" title="asyncioとは" href="about_asyncio.html" />
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+    
+
+  </head><body>
+    <div class="reveal">
+        <div class="slides">
+            <section >
+<h1>コルーチン</h1>
+<dl class="simple">
+<dt>コルーチン関数</dt><dd><p><a class="reference external" href="https://docs.python.org/ja/3/reference/compound_stmts.html#async-def">async def</a> で定義された関数</p>
+</dd>
+<dt>コルーチンオブジェクト</dt><dd><p>コルーチン関数 を呼び出すと返ってくるオブジェクト.</p>
+</dd>
+</dl>
+</section>
+<section >
+<h2>コルーチン関数定義</h2>
+<ul class="simple">
+<li><p><a class="reference external" href="https://docs.python.org/ja/3/reference/compound_stmts.html#async-def">async def</a> で関数を定義すると、コルーチンとなる</p></li>
+</ul>
+<pre data-id="id2"><code data-trim data-noescape class="python">&gt;&gt;&gt; async def func():
+...     print(&quot;呼んだ？&quot;)
+...
+&gt;&gt;&gt; cor = func()
+&gt;&gt;&gt; print(type(cor))
+&lt;class 'coroutine'&gt;</code></pre>
+<ul class="simple">
+<li><p>単にコルーチンを呼び出しただけでは実行されない</p></li>
+</ul>
+<pre data-id="id2"><code data-trim data-noescape class="python">&gt;&gt;&gt; func()
+&lt;coroutine object func at 0x7f774767d6c0&gt;</code></pre>
+</section>
+<section >
+<h2>コルーチンの実行</h2>
+<ul class="simple">
+<li><p>コルーチンを <a class="reference external" href="https://docs.python.org/ja/3/reference/expressions.html#await-expression">await</a></p></li>
+<li><p>awaitした関数( <code class="docutils literal notranslate"><span class="pre">main</span></code> )を <a class="reference external" href="https://docs.python.org/ja/3/library/asyncio-task.html#asyncio.run">asyncio.run</a> 関数から実行</p></li>
+</ul>
+<pre data-id="id4"><code data-trim data-noescape class="python">&gt;&gt;&gt; import asyncio
+&gt;&gt;&gt;
+&gt;&gt;&gt; async def main():
+...     await func()
+...
+&gt;&gt;&gt; asyncio.run(main())
+呼んだ？</code></pre>
+</section>
+<section >
+<h2>練習問題</h2>
+<p>コルーチンを2つ実行してください。コルーチンの関数は渡された引数をprintします。</p>
+<pre data-id="id5"><code data-trim data-noescape class="python">&gt;&gt;&gt; asyncio.run(main(&quot;1こめ&quot;, &quot;2こめ&quot;))
+1こめ
+2こめ</code></pre>
+</section>
+
+        </div>
+    </div>
+    
+    <script src="_static/revealjs4/dist/reveal.js"></script>
+    
+    
+      <script src="_static/revealjs4/plugin/highlight/highlight.js"></script>
+      
+    
+    <script>
+        var revealjsConfig = new Object();
+        
+        
+        
+        
+          revealjsConfig.plugins = [
+            RevealHighlight,
+          ];
+        
+        // More info https://github.com/hakimel/reveal.js#configuration
+        Reveal.initialize(revealjsConfig);
+    </script>
+
+  </body>
+</html>

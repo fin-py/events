@@ -1,0 +1,222 @@
+
+<!DOCTYPE html>
+
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <title>AIOHTTP Client デモ</title>
+    <link rel="stylesheet" type="text/css" href="_static/revealjs4/dist/reveal.css" />
+    <link rel="stylesheet" href="_static/revealjs4/dist/theme/solarized.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/slides.css" />
+    <link rel="stylesheet" type="text/css" href="_static/revealjs4/plugin/highlight/zenburn.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/clipboard.min.js"></script>
+    <script src="_static/copybutton.js"></script>
+    <script src="_static/toggleprompt.js"></script>
+    <script src="_static/translations.js"></script>
+    <link rel="index" title="索引" href="genindex.html" />
+    <link rel="search" title="検索" href="search.html" />
+    <link rel="next" title="AIOHTTP-Client Quickstart" href="aiohttp_client.html" />
+    <link rel="prev" title="AIOHTTP" href="about_aiohttp.html" />
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+    
+
+  </head><body>
+    <div class="reveal">
+        <div class="slides">
+            <section >
+<h1>AIOHTTP Client デモ</h1>
+<ul class="simple">
+<li><dl class="simple">
+<dt><a class="reference external" href="https://pokeapi.co/">PokéAPI</a> を使ってポケモンを150匹Getする方法を3つ紹介し処理の速さを比較する</dt><dd><ul>
+<li><p>参照：<a class="reference external" href="https://www.twilio.com/blog/asynchronous-http-requests-in-python-with-aiohttp-jp">aiohttpとasyncioを使用したPythonの非同期HTTPリクエスト</a></p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>PokéAPIについて</dt><dd><ul>
+<li><p>利用規約 <a class="reference external" href="https://pokeapi.co/docs/v2#fairuse">Documentation - PokéAPI</a></p></li>
+<li><p>endpoint: <a class="reference external" href="https://pokeapi.co/docs/v2#pokemon">https://pokeapi.co/docs/v2#pokemon</a></p></li>
+<li><dl class="simple">
+<dt>API例：</dt><dd><ul>
+<li><p><a class="reference external" href="https://pokeapi.co/api/v2/pokemon/25">https://pokeapi.co/api/v2/pokemon/25</a> : id 25 の ピカチュウ情報URL</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</section>
+<section >
+<h2>Requests を使った場合</h2>
+<ul class="simple">
+<li><p><a class="reference external" href="https://docs.python-requests.org/en/master/">Requests</a> を使って通常のHTTPリクエストでAPIへアクセスする</p></li>
+</ul>
+<pre data-id="requests"><code data-trim data-noescape class="bash">$ pip install requests</code></pre>
+<pre data-id="requests"><code data-trim data-noescape class="default" data-line-numbers>import time 
+
+import requests
+import logging
+logging.basicConfig(level=logging.INFO, format=&quot;%(asctime)s %(message)s&quot;, datefmt=&quot;%X&quot;)
+
+
+def human_requests():
+    for num in range(1,151):
+        url = f&quot;https://pokeapi.co/api/v2/pokemon/{num}&quot;
+        resp = requests.get(url)
+        if resp.status_code == 200:
+            pokemon = resp.json()
+            logging.info(f&quot;{pokemon['id']}: {pokemon['name']}&quot;)
+
+start = time.time()
+human_requests()
+end = time.time()
+logging.info(f&quot;実行結果: time: {end-start}&quot;)
+</code></pre>
+<p>実行結果: <code class="docutils literal notranslate"><span class="pre">time:</span> <span class="pre">5.970675468444824</span></code></p>
+</section>
+<section >
+<h2>非同期にリクエストをする場合</h2>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">await</span> <span class="pre">resp.json()</span></code> でbody をjsonで要求。</p></li>
+<li><p>bodyを待っている間に、後続のポケモンURL</p></li>
+<li><p>jsonが返ってきたら、URLを投げている処理を一旦止めて、ポケモン ID と name を出力</p></li>
+</ul>
+<pre data-id="id2"><code data-trim data-noescape class="default" data-line-numbers>import time
+import asyncio
+
+import aiohttp
+import logging
+logging.basicConfig(level=logging.INFO, format=&quot;%(asctime)s %(message)s&quot;, datefmt=&quot;%X&quot;)
+
+async def main():
+    async with aiohttp.ClientSession() as session:
+        for num in range(1, 151):
+            url = f&quot;https://pokeapi.co/api/v2/pokemon/{num}&quot;
+            async with session.get(url) as resp:
+                pokemon = await resp.json()
+                logging.info(f&quot;{pokemon['id']}: {pokemon['name']}&quot;)
+
+
+start = time.time()
+asyncio.run(main())
+end = time.time()
+logging.info(f&quot;実行結果: time: {end-start}&quot;)
+</code></pre>
+<p>実行結果: <code class="docutils literal notranslate"><span class="pre">time:</span> <span class="pre">2.4725234508514404</span></code></p>
+</section>
+<section >
+<h2>タスクリストを先に作って非同期にリクエストする場合</h2>
+<ul class="simple">
+<li><p>まずは非同期リクエスト用のタスクリストを作成し、 <a class="reference external" href="https://docs.python.org/3/library/asyncio-task.html#asyncio.create_task">asyncio.create_task</a> へ渡す。</p></li>
+<li><p>このタスクリストを <a class="reference external" href="https://docs.python.org/3/library/asyncio-task.html#running-tasks-concurrently">asyncio.gather</a> へ渡して全てのタスクを並行に実行する。この実行を <cite>await</cite> して全部完了するまで待つ。返り値の順序は、<code class="docutils literal notranslate"><span class="pre">create_task</span></code> で作った順序と同じ。</p></li>
+</ul>
+<pre data-id="id3"><code data-trim data-noescape class="default" data-line-numbers>import time
+import asyncio
+import aiohttp
+
+import logging
+
+logging.basicConfig(level=logging.INFO, format=&quot;%(asctime)s %(message)s&quot;, datefmt=&quot;%X&quot;)
+
+
+async def get_pokemon(s, url):
+    async with s.get(url) as resp:
+        pokemon = await resp.json()
+        return (pokemon[&quot;id&quot;], pokemon[&quot;name&quot;])
+
+
+async def main():
+    async with aiohttp.ClientSession() as session:
+        tasks = list()
+        for num in range(1, 151):
+            url = f&quot;https://pokeapi.co/api/v2/pokemon/{num}&quot;
+            tasks.append(asyncio.create_task(get_pokemon(session, url)))
+
+        pokemons = await asyncio.gather(*tasks)
+        for id, pokemon in pokemons:
+            logging.info(f&quot;{id}: {pokemon}&quot;)
+
+
+start = time.time()
+asyncio.run(main())
+logging.info(&quot;end&quot;)
+end = time.time()
+logging.info(f&quot;実行結果: time: {end-start}&quot;)
+</code></pre>
+<p>実行結果: <code class="docutils literal notranslate"><span class="pre">time:</span> <span class="pre">0.4347381591796875</span></code></p>
+<ul class="simple">
+<li><p>返り値の順番は気にせず、通信が終わった順に取得する場合</p></li>
+</ul>
+<pre data-id="id3"><code data-trim data-noescape class="default" data-line-numbers>import time
+import asyncio
+import aiohttp
+
+import logging
+
+logging.basicConfig(level=logging.INFO, format=&quot;%(asctime)s %(message)s&quot;, datefmt=&quot;%X&quot;)
+
+
+async def get_pokemon(s, url):
+    async with s.get(url) as resp:
+        pokemon = await resp.json()
+        return (pokemon[&quot;id&quot;], pokemon[&quot;name&quot;])
+
+
+async def main():
+    async with aiohttp.ClientSession() as session:
+        tasks = list()
+        for num in range(1, 151):
+            url = f&quot;https://pokeapi.co/api/v2/pokemon/{num}&quot;
+            tasks.append(asyncio.create_task(get_pokemon(session, url)))
+
+        for pokemon in asyncio.as_completed(tasks):
+            results = await pokemon
+            print(results)
+
+
+start = time.time()
+asyncio.run(main())
+logging.info(&quot;end&quot;)
+end = time.time()
+logging.info(f&quot;実行結果: time: {end-start}&quot;)
+</code></pre>
+</section>
+
+        </div>
+    </div>
+    
+    <script src="_static/revealjs4/dist/reveal.js"></script>
+    
+    
+      <script src="_static/revealjs4/plugin/highlight/highlight.js"></script>
+      
+    
+    <script>
+        var revealjsConfig = new Object();
+        
+        
+        
+        
+          revealjsConfig.plugins = [
+            RevealHighlight,
+          ];
+        
+        // More info https://github.com/hakimel/reveal.js#configuration
+        Reveal.initialize(revealjsConfig);
+    </script>
+
+  </body>
+</html>

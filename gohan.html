@@ -1,0 +1,137 @@
+
+<!DOCTYPE html>
+
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <title>ごはんでまなぶ非同期処理</title>
+    <link rel="stylesheet" type="text/css" href="_static/revealjs4/dist/reveal.css" />
+    <link rel="stylesheet" href="_static/revealjs4/dist/theme/solarized.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/slides.css" />
+    <link rel="stylesheet" type="text/css" href="_static/revealjs4/plugin/highlight/zenburn.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/clipboard.min.js"></script>
+    <script src="_static/copybutton.js"></script>
+    <script src="_static/toggleprompt.js"></script>
+    <script src="_static/translations.js"></script>
+    <link rel="index" title="索引" href="genindex.html" />
+    <link rel="search" title="検索" href="search.html" />
+    <link rel="next" title="asyncioとは" href="about_asyncio.html" />
+    <link rel="prev" title="AIOHTTPハンズオン" href="index.html" />
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+    
+
+  </head><body>
+    <div class="reveal">
+        <div class="slides">
+            <section >
+<h1>ごはんでまなぶ非同期処理</h1>
+<figure class="align-default">
+<img alt="_images/gohan.png" src="_images/gohan.png" />
+</figure>
+<ul class="simple">
+<li><p>「米を炊く」と「調理する」は同時にできる</p></li>
+<li><p>「味噌汁をつくる」が終わってから「おかずをつくる」</p></li>
+<li><p>「米を炊く」と「調理する」が両方おわったら「いただきます」</p></li>
+</ul>
+</section>
+<section >
+<h2>コード例</h2>
+<pre data-id="id2"><code data-trim data-noescape class="default" data-line-numbers>import asyncio
+import time
+import logging
+
+logging.basicConfig(level=logging.INFO, format=&quot;%(asctime)s %(message)s&quot;, datefmt=&quot;%X&quot;)
+
+
+async def kome():
+    logging.info(&quot;米を炊くヨ&quot;)
+    await asyncio.sleep(10)
+    logging.info(&quot;米が炊けたヨ&quot;)
+
+
+async def chori():
+    logging.info(&quot;調理するヨ&quot;)
+
+    logging.info(&quot;味噌汁つくるヨ&quot;)
+    await asyncio.sleep(3)
+    logging.info(&quot;味噌汁できたヨ&quot;)
+
+    logging.info(&quot;おかずつくるヨ&quot;)
+    await asyncio.sleep(6)
+    logging.info(&quot;おかずできたヨ&quot;)
+
+    logging.info(&quot;調理おわったよヨ&quot;)
+
+
+def taberu():
+    logging.info(&quot;いただきます&quot;)
+    time.sleep(3)
+    logging.info(&quot;ごちそうさまでした&quot;)
+
+
+async def itadakimasu():
+
+    logging.info(&quot;--- ご飯できるまで待つ ---&quot;)
+
+    kome_task = asyncio.create_task(kome())
+    chori_task = asyncio.create_task(chori())
+    await kome_task
+    await chori_task
+
+    logging.info(&quot;--- ご飯できたので食べる ---&quot;)
+
+    taberu()
+
+
+asyncio.run(itadakimasu())</code></pre>
+</section>
+<section >
+<h2>出力例</h2>
+<pre data-id="id3"><code data-trim data-noescape class="default">14:47:14 --- ご飯できるまで待つ ---
+14:47:14 米を炊くヨ
+14:47:14 調理するヨ
+14:47:14 味噌汁つくるヨ
+14:47:17 味噌汁できたヨ
+14:47:17 おかずつくるヨ
+14:47:23 おかずできたヨ
+14:47:23 調理おわったよヨ
+14:47:24 米が炊けたヨ
+14:47:24 --- ご飯できたので食べる ---
+14:47:24 いただきます
+14:47:27 ごちそうさまでした</code></pre>
+</section>
+
+        </div>
+    </div>
+    
+    <script src="_static/revealjs4/dist/reveal.js"></script>
+    
+    
+      <script src="_static/revealjs4/plugin/highlight/highlight.js"></script>
+      
+    
+    <script>
+        var revealjsConfig = new Object();
+        
+        
+        
+        
+          revealjsConfig.plugins = [
+            RevealHighlight,
+          ];
+        
+        // More info https://github.com/hakimel/reveal.js#configuration
+        Reveal.initialize(revealjsConfig);
+    </script>
+
+  </body>
+</html>

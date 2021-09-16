@@ -1,0 +1,152 @@
+
+<!DOCTYPE html>
+
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <title>AIOHTTPハンズオン</title>
+    <link rel="stylesheet" type="text/css" href="_static/revealjs4/dist/reveal.css" />
+    <link rel="stylesheet" href="_static/revealjs4/dist/theme/solarized.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/slides.css" />
+    <link rel="stylesheet" type="text/css" href="_static/revealjs4/plugin/highlight/zenburn.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/clipboard.min.js"></script>
+    <script src="_static/copybutton.js"></script>
+    <script src="_static/toggleprompt.js"></script>
+    <script src="_static/translations.js"></script>
+    <link rel="index" title="索引" href="genindex.html" />
+    <link rel="search" title="検索" href="search.html" />
+    <link rel="next" title="ごはんでまなぶ非同期処理" href="gohan.html" />
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+    
+
+  </head><body>
+    <div class="reveal">
+        <div class="slides">
+            <section >
+<h1>AIOHTTPハンズオン</h1>
+</section>
+<section >
+<h1>AIOHTTPハンズオン</h1>
+<div class="toctree-wrapper compound">
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="gohan.html">ごはんでまなぶ非同期処理</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="gohan.html#id2">コード例</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gohan.html#id3">出力例</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="about_asyncio.html">asyncioとは</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="about_asyncio.html#api">高レベルAPI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="about_asyncio.html#id1">低レベルAPI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="about_asyncio.html#id2">コルーチン</a></li>
+<li class="toctree-l2"><a class="reference internal" href="about_asyncio.html#task">Task</a></li>
+<li class="toctree-l2"><a class="reference internal" href="about_asyncio.html#awaitable">awaitableオブジェクト</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="coroutine.html">コルーチン</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="coroutine.html#id2">コルーチン関数定義</a></li>
+<li class="toctree-l2"><a class="reference internal" href="coroutine.html#id4">コルーチンの実行</a></li>
+<li class="toctree-l2"><a class="reference internal" href="coroutine.html#id5">練習問題</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="task.html">Task</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="task.html#await">単にコルーチンをawaitして実行</a></li>
+<li class="toctree-l2"><a class="reference internal" href="task.html#id1">Taskを作成して実行</a></li>
+<li class="toctree-l2"><a class="reference internal" href="task.html#id2">並行なTask実行</a></li>
+<li class="toctree-l2"><a class="reference internal" href="task.html#id3">asyncio.gatherにコルーチンを渡した例</a></li>
+<li class="toctree-l2"><a class="reference internal" href="task.html#id4">練習問題</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="wait.html">Wait</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="wait.html#future">Future</a></li>
+<li class="toctree-l2"><a class="reference internal" href="wait.html#id1">asyncio.wait_for</a></li>
+<li class="toctree-l2"><a class="reference internal" href="wait.html#id2">asyncio.as_completed</a></li>
+<li class="toctree-l2"><a class="reference internal" href="wait.html#id3">asyncio.wait</a></li>
+<li class="toctree-l2"><a class="reference internal" href="wait.html#id4">練習問題</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="blocking_nonblocking.html">ブロッキング/ノンブロッキング</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="blocking_nonblocking.html#id2">ブロッキング</a></li>
+<li class="toctree-l2"><a class="reference internal" href="blocking_nonblocking.html#id3">ノンブロッキング</a></li>
+<li class="toctree-l2"><a class="reference internal" href="blocking_nonblocking.html#id4">ノンブロッキング関数の実装</a></li>
+<li class="toctree-l2"><a class="reference internal" href="blocking_nonblocking.html#id5">練習問題</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="eventloop.html">イベントループ</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="eventloop.html#id2">イベントループの取得</a></li>
+<li class="toctree-l2"><a class="reference internal" href="eventloop.html#id3">イベントループの処理</a></li>
+<li class="toctree-l2"><a class="reference internal" href="eventloop.html#id4">イベントループのファイナライズ</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="reference.html">参考資料</a></li>
+<li class="toctree-l1"><a class="reference internal" href="about_aiohttp.html">AIOHTTP</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="about_aiohttp.html#id1">特徴</a></li>
+<li class="toctree-l2"><a class="reference internal" href="about_aiohttp.html#id2">インストール</a></li>
+<li class="toctree-l2"><a class="reference internal" href="about_aiohttp.html#getting-started">Getting Started</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="aiohttp_client_demo.html">AIOHTTP Client デモ</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="aiohttp_client_demo.html#requests">Requests を使った場合</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aiohttp_client_demo.html#id2">非同期にリクエストをする場合</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aiohttp_client_demo.html#id3">タスクリストを先に作って非同期にリクエストする場合</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="aiohttp_client.html">AIOHTTP-Client Quickstart</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="aiohttp_client.html#async-with">async with</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aiohttp_client.html#async-for">async for</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aiohttp_client.html#clientsession">ClientSession</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aiohttp_client.html#clientresponse">ClientResponse</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="aiohttp_exercise.html">AIOHTTP-Client Exercise</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="aiohttp_exercise.html#id1">目的</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aiohttp_exercise.html#id2">課題1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aiohttp_exercise.html#id3">課題2</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+<section >
+<h2>Indices and tables</h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="genindex.html"><span class="std std-ref">索引</span></a></p></li>
+<li><p><a class="reference internal" href="py-modindex.html"><span class="std std-ref">モジュール索引</span></a></p></li>
+<li><p><a class="reference internal" href="search.html"><span class="std std-ref">検索ページ</span></a></p></li>
+</ul>
+</section>
+
+        </div>
+    </div>
+    
+    <script src="_static/revealjs4/dist/reveal.js"></script>
+    
+    
+      <script src="_static/revealjs4/plugin/highlight/highlight.js"></script>
+      
+    
+    <script>
+        var revealjsConfig = new Object();
+        
+        
+        
+        
+          revealjsConfig.plugins = [
+            RevealHighlight,
+          ];
+        
+        // More info https://github.com/hakimel/reveal.js#configuration
+        Reveal.initialize(revealjsConfig);
+    </script>
+
+  </body>
+</html>

@@ -1,0 +1,129 @@
+
+<!DOCTYPE html>
+
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <title>asyncioとは</title>
+    <link rel="stylesheet" type="text/css" href="_static/revealjs4/dist/reveal.css" />
+    <link rel="stylesheet" href="_static/revealjs4/dist/theme/solarized.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/slides.css" />
+    <link rel="stylesheet" type="text/css" href="_static/revealjs4/plugin/highlight/zenburn.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/clipboard.min.js"></script>
+    <script src="_static/copybutton.js"></script>
+    <script src="_static/toggleprompt.js"></script>
+    <script src="_static/translations.js"></script>
+    <link rel="index" title="索引" href="genindex.html" />
+    <link rel="search" title="検索" href="search.html" />
+    <link rel="next" title="コルーチン" href="coroutine.html" />
+    <link rel="prev" title="ごはんでまなぶ非同期処理" href="gohan.html" />
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+    
+
+  </head><body>
+    <div class="reveal">
+        <div class="slides">
+            <section >
+<h1>asyncioとは</h1>
+<ul class="simple">
+<li><p>async/await 構文を使い並行処理のコードを書くためのライブラリ</p></li>
+<li><p>非同期フレームワークの基盤</p>
+<ul>
+<li><p>ネットワークとウェブサーバ</p></li>
+<li><p>データベース接続ライブラリ</p></li>
+<li><p>分散タスクキュー</p></li>
+</ul>
+</li>
+<li><p>IOバウンドや高レベルの構造化されたネットワークコードに適している</p></li>
+</ul>
+</section>
+<section >
+<h2>高レベルAPI</h2>
+<ul class="simple">
+<li><p>並行にPythonコルーチンを起動し、実行全体を管理する</p></li>
+<li><p>ネットワークIOとIPCを執り行う</p></li>
+<li><p>subprocessesを管理する</p></li>
+<li><p>キューを使ってタスクを分散する</p></li>
+<li><p>並列処理のコードを同期させる</p></li>
+</ul>
+</section>
+<section >
+<h2>低レベルAPI</h2>
+<ul class="simple">
+<li><p>非同期APIを提供するイベントループの作成と管理</p>
+<ul>
+<li><p>ネットワーク通信</p></li>
+<li><p>サブプロセスの実行</p></li>
+<li><p>OSシグナル</p></li>
+</ul>
+</li>
+<li><p>Transportを使った効率的なprotocolを実装</p></li>
+<li><p>コールバックを用いたライブラリとasync/await構文を使ったコードの橋渡し</p></li>
+</ul>
+</section>
+<section >
+<h2>コルーチン</h2>
+<ul class="simple">
+<li><p>サブルーチンのより一般的な形式</p></li>
+<li><p>サブルーチンには決められた地点から入り、別の決められた地点から出る</p></li>
+<li><p>多くの様々な地点から入る、出る、再開できる</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/ja/3/reference/compound_stmts.html#async-def">async def</a> 文で実装できる</p></li>
+<li><p>実態はジェネレータ</p></li>
+</ul>
+</section>
+<section >
+<h2>Task</h2>
+<ul class="simple">
+<li><p>コルーチンを平行にスケジュール</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">asyncio.create_task</span></code> 関数でコルーチンをTaskにラップできる</p></li>
+</ul>
+</section>
+<section >
+<h2>awaitableオブジェクト</h2>
+<ul class="simple">
+<li><p>await式の中で使えるオブジェクト</p></li>
+<li><p>多くのasyncio APIはawaitableオブジェクトを受け取るように設計されている</p></li>
+<li><p>3つの種類がある</p>
+<ul>
+<li><p>コルーチン</p></li>
+<li><p>Task</p></li>
+<li><p>Future</p></li>
+</ul>
+</li>
+</ul>
+</section>
+
+        </div>
+    </div>
+    
+    <script src="_static/revealjs4/dist/reveal.js"></script>
+    
+    
+      <script src="_static/revealjs4/plugin/highlight/highlight.js"></script>
+      
+    
+    <script>
+        var revealjsConfig = new Object();
+        
+        
+        
+        
+          revealjsConfig.plugins = [
+            RevealHighlight,
+          ];
+        
+        // More info https://github.com/hakimel/reveal.js#configuration
+        Reveal.initialize(revealjsConfig);
+    </script>
+
+  </body>
+</html>
