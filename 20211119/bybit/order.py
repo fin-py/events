@@ -1,7 +1,10 @@
 import asyncio
+import logging
 import pprint
 
 import pybotters
+
+logging.basicConfig(level=logging.DEBUG)
 
 
 async def order_create():
@@ -20,7 +23,8 @@ async def order_create():
             },
         )
         data = await r.json()
-        pprint.pprint(data)
+        logging.debug(pprint.pformat(data))
+        return data
 
 
 async def order():
@@ -34,7 +38,8 @@ async def order():
             },
         )
         data = await r.json()
-        pprint.pprint(data)
+        logging.debug(pprint.pformat(data))
+        return data
 
 
 async def order_cancel():
@@ -49,7 +54,8 @@ async def order_cancel():
             },
         )
         data = await r.json()
-        pprint.pprint(data)
+        logging.debug(pprint.pformat(data))
+        return data
 
 
 async def order_calcell_all():
@@ -63,4 +69,6 @@ async def order_calcell_all():
             },
         )
         data = await r.json()
-        pprint.pprint(data)
+        logging.debug(pprint.pformat(data))
+        return data
+
