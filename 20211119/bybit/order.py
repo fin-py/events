@@ -9,8 +9,13 @@ logging.basicConfig(level=logging.DEBUG)
 
 
 async def order_create(
-    symbol, side, qty, price, order_type="Limit", time_in_force="GoodTillCancel"
-):
+    symbol: str,
+    side: str,
+    qty: int,
+    price: int,
+    order_type: str = "Limit",
+    time_in_force: str = "GoodTillCancel",
+) -> dict:
     async with pybotters.Client(
         base_url="https://api-testnet.bybit.com/", apis="apis.json"
     ) as client:
@@ -30,7 +35,7 @@ async def order_create(
         return data
 
 
-async def order(symbol):
+async def order(symbol: str) -> dict:
     async with pybotters.Client(
         base_url="https://api-testnet.bybit.com/", apis="apis.json"
     ) as client:
@@ -45,7 +50,7 @@ async def order(symbol):
         return data
 
 
-async def order_cancel(symbol, order_id):
+async def order_cancel(symbol: str, order_id: str) -> dict:
     async with pybotters.Client(
         base_url="https://api-testnet.bybit.com/", apis="apis.json"
     ) as client:
@@ -61,7 +66,7 @@ async def order_cancel(symbol, order_id):
         return data
 
 
-async def order_calcell_all(symbol):
+async def order_cancel_all(symbol: str) -> dict:
     async with pybotters.Client(
         base_url="https://api-testnet.bybit.com/", apis="apis.json"
     ) as client:
