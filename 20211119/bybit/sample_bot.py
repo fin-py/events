@@ -72,7 +72,7 @@ async def run_bot(
             return_when=asyncio.tasks.ALL_COMPLETED,
         )
         time.sleep(interval)
-        await order.order_cancel_all(symbol)
+        await asyncio.wait_for(order.order_cancel_all(symbol), timeout=1)
 
 
 async def main(symbol: str, qty: int, drift_price: float):
@@ -82,4 +82,4 @@ async def main(symbol: str, qty: int, drift_price: float):
         await order.order_cancel_all(symbol)
 
 
-asyncio.run(main("BTCUSD", 1, 1000))
+asyncio.run(main("BTCUSD", 1, 50))
