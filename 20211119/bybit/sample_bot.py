@@ -82,4 +82,4 @@ async def main(symbol: str, qty: int, drift_price: float):
         await order.order_cancel_all(symbol)
 
 
-asyncio.run(main("BTCUSD", 1, 50))
+asyncio.run(main("BTCUSD", 1, 30))

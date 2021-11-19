@@ -61,7 +61,7 @@ async def order_cancel(symbol, order_id):
         return data
 
 
-async def order_calcell_all(symbol):
+async def order_cancel_all(symbol):
     async with pybotters.Client(
         base_url="https://api-testnet.bybit.com/", apis="apis.json"
     ) as client:
