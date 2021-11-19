@@ -17,7 +17,7 @@
         - `symbol` (必須) : XBTUSD (テストネットではXBTUSDだけかと)
         - `side`: Buy 
         - `orderQty` : 100 
-        - `price`: 59400 （テストしたいのですぐにDoneされない基準においてください）
+        - `price`: xxxxxx （テストしたいのですぐにDoneされない基準においてください）
         - `orderType`: Limit
         - `timeInForce`: GoodTillCancel
     1. `Try it out!` ボタンを押す
@@ -55,7 +55,7 @@
                     "side": "Buy",  
                     "ordType": "Limit",
                     "orderQty": 100,
-                    "price": 59400,
+                    "price": xxxxxx,
                     "timeInForce": "GoodTillCancel",
                 },
             )
